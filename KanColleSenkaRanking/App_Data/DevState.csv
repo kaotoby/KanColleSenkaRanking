@@ -1,0 +1,27 @@
+Type,Name,State,StartTime,EndTime
+Other(DataSource),Collect User Accounts,InProgress,3/11/2015,
+Database,Database Design and Construction,Done,3/11/2015,3/11/2015
+Database,Data Praser Engine,Done,3/11/2015,3/12/2015
+Database,Data Source Connector,Done,3/11/2015,3/13/2015
+Web-Back,Web Framework Set up,Done,3/12/2015,3/13/2015
+Web-Back,Web Request Timmimg Feature,Done,3/12/2015,3/15/2015
+Web-Front,Web UI Design (/),Done,3/12/2015,3/16/2015
+Web-Front,Web Script (/),Planned,,
+Web-Back,Web Server Controller (/server),Done,3/12/2015,3/14/2015
+Web-Front,Web UI Design (/server),Done,3/12/2015,3/14/2015
+Other(Algorithm),Rank Point Prediction Algorithm,Planned,,
+Web-Back,Web Server Controller (/player),Done,3/15/2015,3/18/2015
+Web-Front,Web UI Design (/player),Done,3/15/2015,3/18/2015
+Web-Front,Web Graphing Script (/player),Done,3/16/2015,3/17/2015
+Database,Database Normalization ,Done,3/15/2015,3/16/2015
+Web-Back,Develope State Info Online,Done,3/15/2015,3/15/2015
+Database,Collect Exp Data On Month-end,Planned,,
+Web-Back,Dashboard For All Servers,Planned,,
+Web-Front,Dashboard UI  Design,Planned,,
+Web-Back,AJAX (Back),Planned,,
+Web-Front,AJAX (Front),Planned,,
+Web-Back,Month Ranking,Planned,,
+Web-Front,[SEO] Content Markup,Planned,,
+Web-Back,[SEO] Sitemap,Done,3/20/2015,3/21/2015
+Web-Back,Past Ranking Board,InProgress,3/21/2015,
+Web-Front,Past Ranking Board,Planned,,

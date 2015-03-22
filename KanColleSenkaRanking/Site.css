@@ -1,0 +1,106 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    background: url('../images/bg.png') repeat 100% 100%;
+}
+
+hr{
+  color: #ccc;
+  border-color: #ccc;
+  background-color: #ccc;
+}
+
+footer{
+    text-align: right;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#performance {
+    font-size: 0.6em;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+    background-color: rgba(32, 32, 32, 0.1) !important;
+    text-shadow: 0 0 2px #000, 0 0 5px #000;
+    color: #fff !important;
+}
+
+.font-hgrgm {
+    font-family: "HGrgm";
+}
+
+@font-face {
+    font-family: 'HGrgm';
+    font-style: normal;
+    font-weight: 400;
+    src: local("HGrgm"), url('../content/fonts/hgrgm.woff') format("woff");
+}
+
+@-webkit-keyframes waves-r2l {
+    0% {
+        background-position: 0 0
+    }
+    100% {
+        background-position: -552px 0
+    }
+}
+
+@keyframes waves-r2l {
+    0% {
+        background-position: 0 0
+    }
+    100% {
+        background-position: -552px 0
+    }
+}
+
+@-webkit-keyframes waves-l2r {
+    0% {
+        background-position: 0 0
+    }
+    100% {
+        background-position: 552px 0
+    }
+}
+
+@keyframes waves-l2r {
+    0% {
+        background-position: 0 0
+    }
+    100% {
+        background-position: 552px 0
+    }
+}
+
+@-webkit-keyframes kan-swing {
+    0% {
+        -webkit-transform: rotate(1deg)
+    }
+    50% {
+        -webkit-transform: rotate(-2deg)
+    }
+    100% {
+        -webkit-transform: rotate(1deg)
+    }
+}
+
+@keyframes kan-swing {
+    0% {
+        transform: rotate(1deg)
+    }
+    50% {
+        transform: rotate(-2deg)
+    }
+    100% {
+        transform: rotate(1deg)
+    }
+}

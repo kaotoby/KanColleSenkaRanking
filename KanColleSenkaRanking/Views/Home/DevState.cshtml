@@ -1,0 +1,32 @@
+﻿@using KanColleSenkaRanking.Models
+@{
+    IList<DevStateData> dataset = ViewBag.DevStateData;
+}
+<!-- Develope State -->
+<h2>開発状態</h2>
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <td>Type</td>
+            <td>Name</td>
+            <td>State</td>
+            <td class="visible-lg">Start</td>
+            <td class="visible-lg">End</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var data in dataset) {
+            <tr>
+                <td class="@data.TypeText.HtmlClass">@data.TypeText.Value</td>
+                <td>@data.Name</td>
+                <td class="@data.StateText.HtmlClass">@data.StateText.Value</td>
+                <td class="visible-lg">@data.StartDateString</td>
+                <td class="visible-lg">@data.EndDateString</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="5" class="text-center"><a class="btn btn-default btn-xs" href="/home/devtool">開発ツール＆フレームワーク</a></td>
+        </tr>
+    </tbody>
+</table>
+<!-- Develope End -->

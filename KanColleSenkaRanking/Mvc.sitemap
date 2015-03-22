@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="戦果基地" controller="Home" action="Index" key="Home" changeFrequency="Daily"
+                  description="このサイトは艦娘戦果ランキング集計だけじゃなく、「履歴」と「分析チャート」の機能もあります。各サーバ戦果情報を午前と午後3時半頃更新しております。">
+    <mvcSiteMapNode title="全サーバ" controller="Server" url="/server/" key="Server" description="全サーバの情報一目" changeFrequency="Hourly" />
+  </mvcSiteMapNode>
+
+</mvcSiteMap>

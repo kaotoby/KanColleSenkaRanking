@@ -1,0 +1,144 @@
+﻿html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+@media screen and (max-width: 767px) {
+    .row-offcanvas {
+        position: relative;
+        -webkit-transition: all .25s ease-out;
+        -o-transition: all .25s ease-out;
+        -moz-transition: all .25s ease-out;
+        transition: all .25s ease-out;
+    }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+}
+
+body {
+    padding-top: 60px;
+    padding-bottom: 20px;
+    background: url('../images/bg.png') repeat 100% 100%;
+}
+
+hr {
+  color: #ccc;
+  border-color: #ccc;
+  background-color: #ccc;
+}
+
+thead {
+    font-weight: bold;
+    background-color: rgba(32,32,32,0.2);
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.page-header {
+    margin: 5px 0 20px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+    background-color: rgba(32, 32, 32, 0.1) !important;
+    text-shadow: 0 0 2px #000, 0 0 5px #000;
+    color: #fff !important;
+}
+
+#performance {
+    font-size: 0.6em;
+}
+
+#chartArea {
+    width: 100%;
+}
+
+#sitemap {
+    font-size: 11px;
+    margin: 0 15px;
+}
+
+#twitterButton {
+    margin-top: 10px;
+    height: 10px;
+}
+
+#devToolList {
+    font-size: 20px;
+}
+#devToolList dt{
+    font-size: 24px;
+    padding-top: 10px;
+}
+#devToolList dd{
+    line-height: 50px;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.font-hgrgm {
+    font-family: "HGrgm";
+}
+
+h1 small {
+    display: inline-block;
+}
+
+@font-face {
+    font-family: "HGrgm";
+    font-style: normal;
+    font-weight: 400;
+    src: local("HGrgm"), url('../content/fonts/hgrgm.woff') format("woff");
+}
+
+@media (min-width: 992px) {
+    #serverInfoName {
+        font-size: 24px;
+    }
+    #serverInfo {
+        top: 50px;
+        line-height: 25px;
+    }
+    .move-right-md {
+        text-align: right;
+    }
+}

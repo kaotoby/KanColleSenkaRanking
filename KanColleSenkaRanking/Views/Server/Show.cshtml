@@ -1,0 +1,46 @@
+﻿@using KanColleSenkaRanking.Models
+@{
+    SenkaServerData server = ViewBag.Server;
+    IList<SenkaData> dataset = ViewBag.SenkaDataSet;
+    HtmlString State;
+    if (server.Enabled) {
+        string timeMarkup = server.LastUpdateTime.Time.ToString("s");
+        State = new HtmlString(string.Format("<time datetime=\"{0}\">{1}</time>", timeMarkup, server.LastUpdateTimeString));
+    }else {
+        State = new HtmlString("情報なし");
+    }
+    ViewBag.Keywords = string.Format(",{0}", server.Name);
+}
+<div class="page-header">
+    <h1>@server.Name <br class="visible-sm visible-xs" /><small>@State</small></h1>
+</div>
+<table class="table table-bordered table-condensed table-hover">
+    <thead class="panel-heading">
+        <tr>
+            <td>順位</td>
+            <td>Lv.</td>
+            <td>提督名</td>
+            <td class="hidden-sm hidden-xs">階級</td>
+            <td>コメント</td>
+            <td>戦果</td>
+            <td class="hidden-sm hidden-xs">勲章</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var data in dataset) {
+            <tr id="rank@(data.Ranking)" class="clickable-row" data-href="/player/@data.PlayerID">
+                <td>@(data.Ranking)位 <span class="@data.RankingDelta.HtmlClass">@data.RankingDelta.Value</span></td>
+                <td>@data.Level</td>
+                <td>@data.PlayerName</td>
+                <td class="hidden-sm hidden-xs">@data.RankName</td>
+                <td>@data.Comment</td>
+                <td>@data.RankPoint <span class="@data.RankPointDelta.HtmlClass">@data.RankPointDelta.Value</span></td>
+                <td class="hidden-sm hidden-xs">@(data.Medals == 1 ? "甲" : "")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (ViewBag.DefaultList && server.Enabled) {
+    <a class="btn btn-default btn-xs" href="@(Request.RawUrl)?limit=1000#rank99">1-1000位</a>
+}
+

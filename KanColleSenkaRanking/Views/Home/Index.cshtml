@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.TitleSuffix = "";
+}
+
+<div class="jumbotron">
+    <h1>@MvcApplication.Name</h1>
+    <p class="h4">
+        このサイトは艦娘戦果ランキング集計だけじゃなく、<br class="hidden-lg" />
+        「履歴」と「分析チャート」の機能もあります。<br class="hidden-lg" />
+        各サーバ戦果情報を午前と午後3時半頃更新しております。<br />
+        <br />
+        みなさんにより便利に、<br class="hidden-lg hidden-md" />
+        楽しくご利用いただけるように、<br class="hidden-lg" />
+        ただいま新機能を鋭意開発中！<br class="hidden-md" />
+        どうか楽しみにお待ちください。<br />
+        <br />
+        先輩の「<a href="http://noisyk5.jp/kancolle.html">戦果速報</a>」に敬意を！
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-md-push-8">
+        @Html.Partial("Announcement")
+        <hr />
+        @Html.Partial("ServerList")
+    </div>
+    <hr class="hidden-lg hidden-md" />
+    <div class="col-md-8 col-md-pull-4">
+        @Html.Partial("DevState")
+    </div>
+</div>

@@ -1,0 +1,72 @@
+﻿@using KanColleSenkaRanking.Models
+@using Newtonsoft.Json;
+@{
+    SenkaServerData server = ViewBag.Server;
+    SenkaData playerData = ViewBag.PlayerData;
+    IList<SenkaData> dataset = ViewBag.PlayerDataSet;
+    ChartData RankPointChart = ViewBag.RankPointChart;
+    ChartData RankingChart = ViewBag.RankingChart;
+    ChartData RankPointDeltaChart = ViewBag.RankPointDeltaChart;
+    string RankingClass = "";
+    if (playerData.Date != server.LastUpdateTime.Time) {
+        RankingClass = "hidden";
+    }
+    ViewBag.Keywords = string.Format(",{0},{1}", playerData.PlayerName, server.Name);
+    ViewBag.TitleSuffix = string.Format(" ({0}) - {1}", server.Name, MvcApplication.Name);
+}
+@section Scripts{
+    <script>
+        var PlayerCharts = [];
+        var PlayerName = '@playerData.PlayerName';
+        var rankLable = @Html.Raw(JsonConvert.SerializeObject(RankPointChart.Lables));
+        var rankPointData = @Html.Raw(RankPointChart.ToJsonString());
+        var rankingData = @Html.Raw(RankingChart.ToJsonString());
+
+        var rankPointDeltaLable = @Html.Raw(JsonConvert.SerializeObject(RankPointDeltaChart.Lables));
+        var rankPointDeltaData = @Html.Raw(RankPointDeltaChart.ToJsonString());
+    </script>
+    @Scripts.Render("~/bundles/ichart")
+    @Scripts.Render("~/bundles/player-chart")
+}
+
+<div class="page-header row">
+    <div class="col-lg-8 col-md-7">
+        <h1>@playerData.PlayerName <br class="hidden-lg" /><small>@playerData.Comment</small></h1>
+    </div>
+    <div id="serverInfo" class="col-lg-4 col-md-5 move-right-md">
+        <span class="h4" id="serverInfoName">@server.Name</span><br class="hidden-sm hidden-xs" />
+        <span class="h4 @RankingClass">@(playerData.Ranking)位 <small>(@(playerData.RankPoint)戦果)</small></span><br class="hidden-sm hidden-xs" />
+    </div>
+    <div class="col-md-8">
+        <h4>司令部Level. @playerData.Level <small>[@(playerData.RankName)]</small></h4>
+    </div>
+</div>
+<!-- Activity -->
+<div class="row">
+    <h3 class="text-center col-md-12">アクティビティ</h3>
+</div>
+<table class="table table-bordered table-condensed">
+    <thead class="panel-heading">
+        <tr>
+            <td>日付</td>
+            <td>Lv.</td>
+            <td>コメント</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var data in dataset) {
+            <tr>
+                <td>@data.Date.ToString("yyyy年M月d日 H時")</td>
+                <td>@data.Level</td>
+                <td>@data.Comment</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Charts -->
+<div id="chartArea">
+    <div id='rankingChart'></div>
+    <div id='rankingDeltaChart'></div>
+    <div id='rankPointChart'></div>
+</div>
+
