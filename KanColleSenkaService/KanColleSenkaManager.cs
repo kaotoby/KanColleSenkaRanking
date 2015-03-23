@@ -61,7 +61,7 @@ namespace KanColleSenkaService
 #if DEBUG
             for (int i = 1; i <= 3; i++) {
 #else
-            for (int i = 1; i <= 100; i++) {
+            for (int i = 1; i < 100; i++) {
 #endif
                 string jsonResult = "";
                 postDic["api_pageno"] = i.ToString();

@@ -12,7 +12,7 @@ namespace KanColleSenkaRanking.Controllers
     public class ServerController : Controller
     {
 #if !DEBUG
-        [OutputCache(Duration = 600, VaryByParam = "serverID,lm", Location = OutputCacheLocation.Server)]
+        [OutputCache(Duration = 600, VaryByParam = "serverID;lm", Location = OutputCacheLocation.Server)]
 #endif
         [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Show(int serverID = 0, int lm = 0) {

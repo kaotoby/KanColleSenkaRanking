@@ -196,7 +196,7 @@ namespace KanColleSenkaService.Module
 
         public void SaveToDataBase() {
             int count = _dataSet.Count;
-            if (count != 1000) {
+            if (count != 990) {
                 log.Warn(string.Format("[ServerID {0}] Data count is {1}", _id, count));
             }
             string _sql = @"INSERT INTO Senka VALUES " +

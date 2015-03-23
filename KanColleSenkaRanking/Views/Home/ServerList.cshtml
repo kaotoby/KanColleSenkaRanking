@@ -1,15 +1,14 @@
 ﻿@using KanColleSenkaRanking.Models
 @{
     ICollection<SenkaServerData> servers = ViewBag.ServerList;
-    IList<SenkaServerData> enabledServers = servers.Where(s => s.Enabled).ToList();
+    IList<SenkaServerData> disabledServers = servers.Where(s => !s.Enabled).ToList();
 }
 <!-- Server List -->
 <h3>
-    データがあるのサーバ<br />
-    <small>@enabledServers.Count / @servers.Count</small>
+    データがないのサーバ
 </h3>
 <ul class="h4">
-    @foreach (var server in enabledServers) {
+    @foreach (var server in disabledServers) {
         <li>@server.Name</li>
     }
 </ul>
