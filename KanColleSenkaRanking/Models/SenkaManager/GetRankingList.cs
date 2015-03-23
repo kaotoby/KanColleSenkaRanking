@@ -15,6 +15,7 @@ namespace KanColleSenkaRanking.Models
             SenkaServerData server = _servers[serverID];
             if (!server.Enabled) return latestDataset;
 
+            server.CheckForNewData();
             string serverSQL = " WHERE DateID = @DateID AND ServerID = @ServerID";
             string latestSQL = " AND Ranking <= @Ranking";
             using (var DataBaseConnection = NewSQLiteConnection())
@@ -80,6 +81,7 @@ namespace KanColleSenkaRanking.Models
         public IList<SenkaData> GetDefaultRankingList(int serverID) {
             SenkaServerData server = _servers[serverID];
             if (server.Enabled) {
+                server.CheckForNewData();
                 return GetDefaultRankingList(serverID, server.LastUpdateTime.ID, server.CompareToTime.ID);
             } else {
                 return new List<SenkaData>();
@@ -92,6 +94,7 @@ namespace KanColleSenkaRanking.Models
             SenkaServerData server = _servers[serverID];
             if (!server.Enabled) return latestDataset;
 
+            //Don't need to check for new data again, due to it's benn signed already.
             string serverSQL = " WHERE DateID = @DateID AND ServerID = @ServerID";
             string latestSQL = " AND (Ranking <= 100 OR Ranking = 500 OR Ranking = 1000)";
             using (var DataBaseConnection = NewSQLiteConnection())

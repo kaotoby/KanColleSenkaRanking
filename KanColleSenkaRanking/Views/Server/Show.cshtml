@@ -1,18 +1,6 @@
-﻿@using KanColleSenkaRanking.Models
-@{
-    SenkaServerData server = ViewBag.Server;
-    IList<SenkaData> dataset = ViewBag.SenkaDataSet;
-    HtmlString State;
-    if (server.Enabled) {
-        string timeMarkup = server.LastUpdateTime.Time.ToString("s");
-        State = new HtmlString(string.Format("<time datetime=\"{0}\">{1}</time>", timeMarkup, server.LastUpdateTimeString));
-    }else {
-        State = new HtmlString("情報なし");
-    }
-    ViewBag.Keywords = string.Format(",{0}", server.Name);
-}
+﻿@model KanColleSenkaRanking.ViewModels.ServerViewModule
 <div class="page-header">
-    <h1>@server.Name <br class="visible-sm visible-xs" /><small>@State</small></h1>
+    <h1>@Model.Server.Name <br class="visible-sm visible-xs" /><small>@Model.State</small></h1>
 </div>
 <table class="table table-bordered table-condensed table-hover">
     <thead class="panel-heading">
@@ -27,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var data in dataset) {
+        @foreach (var data in Model.RankingDataSet) {
             <tr id="rank@(data.Ranking)" class="clickable-row" data-href="/player/@data.PlayerID">
                 <td>@(data.Ranking)位 <span class="@data.RankingDelta.HtmlClass">@data.RankingDelta.Value</span></td>
                 <td>@data.Level</td>
@@ -40,7 +28,7 @@
         }
     </tbody>
 </table>
-@if (ViewBag.DefaultList && server.Enabled) {
+@if (Model.IsDefaultListing && Model.Server.Enabled) {
     <a class="btn btn-default btn-xs" href="@(Request.RawUrl)?lm=1000#rank99">1-1000位</a>
 }
 

@@ -9,7 +9,6 @@ namespace FewMoe.Controllers
     public class ErrorController : Controller
     {
         // GET: Error
-        [OutputCache(Duration = 36000)]
         public ActionResult DisplayError(string ErrorCode) {
             if (ViewEngines.Engines.FindView(ControllerContext, ErrorCode, null).View == null) {
                 ErrorCode = "404";

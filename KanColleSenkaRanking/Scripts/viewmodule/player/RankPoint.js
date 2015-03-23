@@ -114,7 +114,7 @@ PlayerCharts.push(function (width, height) {
             * j:序号 从0开始
             */
             parsePoint: function (d, v, x, y, j) {
-                if (v == min + 0.1)
+                if ((v * 10) % 10 == 1)
                     return { ignored: true };
             }
         },
