@@ -14,7 +14,7 @@ namespace KanColleSenkaRanking.Controllers
         private SenkaManager serverManager = DependencyResolver.Current.GetService<SenkaManager>();
 
 #if !DEBUG
-        [OutputCache(Duration = 120, VaryByParam = "serverID,lm", Location = OutputCacheLocation.Server)]
+        //[OutputCache(Duration = 120, VaryByParam = "serverID,lm", Location = OutputCacheLocation.Server)]
 #endif
         [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Show(int serverID = 0, int lm = 0) {
