@@ -60,7 +60,7 @@ namespace KanColleSenkaRanking.ViewModels
                 _activity = serverManager.GetPlayerActivityList(playerID, 3);
 
                 if (_playerData.Date != _server.LastUpdateTime.DateTime) {
-                    _rankingHtmlClass = "hidden";
+                    _rankingHtmlClass = " hidden";
                 } else {
                     _rankingHtmlClass = "";
                 }

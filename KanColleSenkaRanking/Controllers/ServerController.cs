@@ -21,6 +21,7 @@ namespace KanColleSenkaRanking.Controllers
                 return View("Dashboard");
             } else {
                 ServerViewModule module = new ServerViewModule(serverID, lm);
+                ViewBag.Server = module.Server;
                 return View(module);
             }
         }
