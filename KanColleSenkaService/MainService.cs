@@ -30,7 +30,6 @@ namespace KanColleSenkaService
         }
 
         protected override void OnStop() {
-            Kan.MainThread.Abort();
             log.Warn("[Stopped] Kan Colle Senka Service");
         }
     }
