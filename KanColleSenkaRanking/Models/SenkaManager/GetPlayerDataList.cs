@@ -77,7 +77,7 @@ namespace KanColleSenkaRanking.Models
                 lower = 500;
             } else {
                 upper = 500;
-                lower = 1000;
+                lower = 990;
             }
 
             string playerSQL = " WHERE (Ranking = @RankingUpper OR Ranking = @RankingLower)" +

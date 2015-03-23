@@ -40,8 +40,8 @@ namespace KanColleSenkaService
                         Inprocess = true;
                         sm.ProcessServerData(data);
                     } catch (Exception ex) {
-                        data.NextUpdateTime = DateTime.Now.AddMinutes(20);
                         data.ErrorrCount++;
+                        data.NextUpdateTime = DateTime.Now.AddMinutes(5 * data.ErrorrCount);
                         if (!(ex is WebException)) {
                             log.Fatal("MainFunc Fail!", ex);
                         }

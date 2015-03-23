@@ -78,7 +78,7 @@ namespace KanColleSenkaRanking.Models
         }
 
         public void CheckForNewData() {
-            DateTime now = DateTime.UtcNow.AddHours(6);
+            DateTime now = DateTime.UtcNow.AddHours(9); //UTC+9 JST
             if (now > _lastUpdateTime.DateTime.AddHours(12)) {
                 RefreshLastUpdateTime();
             }

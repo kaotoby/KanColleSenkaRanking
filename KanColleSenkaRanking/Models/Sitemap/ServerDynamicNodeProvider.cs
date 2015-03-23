@@ -20,6 +20,7 @@ namespace KanColleSenkaRanking.Models
                     dynamicNode.Description = "このサーバの情報今はありません。";
                 }
                 dynamicNode.ChangeFrequency = ChangeFrequency.Hourly;
+                dynamicNode.UpdatePriority = UpdatePriority.High;
                 dynamicNode.RouteValues.Add("serverID", server.ID);
 
                 yield return dynamicNode;
