@@ -20,7 +20,7 @@ namespace KanColleSenkaRanking.Models
         /// <summary>
         /// Last update time of the server data.
         /// </summary>
-        public string LastUpdateTimeString { get { return _lastUpdateTime.Time.ToString("yyyy年M月d日 H時"); } }
+        public string LastUpdateTimeString { get { return _lastUpdateTime.DateTime.ToString("yyyy年M月d日 H時"); } }
         /// <summary>
         /// Thte time used to compare to current data.
         /// </summary>
@@ -79,7 +79,7 @@ namespace KanColleSenkaRanking.Models
 
         public void CheckForNewData() {
             DateTime now = DateTime.UtcNow.AddHours(6);
-            if (now > _lastUpdateTime.Time.AddHours(12)) {
+            if (now > _lastUpdateTime.DateTime.AddHours(12)) {
                 RefreshLastUpdateTime();
             }
         }

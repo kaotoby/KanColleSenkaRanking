@@ -11,12 +11,11 @@ namespace KanColleSenkaRanking.Models
     public class ChartData
     {
         public ChartJsonData[] Data { get { return _data; } }
-        public string[] Lables { get{return _lables;} }
+        public string[] Lables { get { return _lables; } }
+        public const int NONE = int.MaxValue;
 
         private ChartJsonData[] _data;
         private string[] _lables;
-
-        private const int NONE = int.MaxValue;
 
         public void SetData(ChartJsonData[] data, string[] lables) {
             _data = data;

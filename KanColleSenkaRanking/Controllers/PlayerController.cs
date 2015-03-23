@@ -1,4 +1,4 @@
-﻿using KanColleSenkaRanking.Models;
+﻿using KanColleSenkaRanking.ViewModels;
 using MvcSiteMapProvider;
 using System;
 using System.Collections.Generic;
@@ -11,24 +11,14 @@ namespace KanColleSenkaRanking.Controllers
 {
     public class PlayerController : Controller
     {
-        private SenkaManager serverManager = DependencyResolver.Current.GetService<SenkaManager>();
-
 #if !DEBUG
         [OutputCache(Duration = 600, VaryByParam = "playerID", Location = OutputCacheLocation.Server)]
 #endif
         [MvcSiteMapNodeAttribute(DynamicNodeProvider = "KanColleSenkaRanking.Models.PlayerDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Show(long playerID) {
-            SenkaServerData server;
-            var chartDataSet = serverManager.GetPlayerDataList(playerID, out server);
-            if (server != null) {
-                var charts = ChartData.GetPlayerCharts(chartDataSet, server.ID);
-                ViewBag.PlayerDataSet = serverManager.GetPlayerActivityList(playerID, 3);
-                ViewBag.PlayerData = chartDataSet.Last();
-                ViewBag.RankPointChart = charts[0];
-                ViewBag.RankingChart = charts[1];
-                ViewBag.RankPointDeltaChart = charts[2];
-                ViewBag.Server = server;
-                return View();
+            PlayerViewModule module = new PlayerViewModule(playerID);
+            if (module.Server != null) {
+                return View(module);
             } else {
                 ViewBag.PlayerID = playerID;
                 return RedirectToAction("NoResult");

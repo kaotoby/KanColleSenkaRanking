@@ -46,8 +46,10 @@ namespace KanColleSenkaRanking.Models
                         data["RankPoint"] = reader["RankPoint"];
                         data["RankName"] = reader["RankName"];
                         data["Medals"] = reader["Medals"];
-                        serverData = _servers[Convert.ToInt32(reader["ServerID"])];
                         dataset.Add(new SenkaData(data));
+                        if (serverData == null) {
+                            serverData = _servers[Convert.ToInt32(reader["ServerID"])];
+                        }
                     }
                 }
             }

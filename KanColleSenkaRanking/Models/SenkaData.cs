@@ -13,6 +13,10 @@ namespace KanColleSenkaRanking.Models
         /// </summary>
         public DateTime Date { get { return _date; } }
         /// <summary>
+        /// The time string that data collected.
+        /// </summary>
+        public string DateString { get { return _date.ToString("yyyy年M月d日 H時"); } }
+        /// <summary>
         /// The player ranking.
         /// </summary>
         public int Ranking { get { return _ranking; } }

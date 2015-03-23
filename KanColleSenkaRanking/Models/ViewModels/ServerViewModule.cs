@@ -31,7 +31,7 @@ namespace KanColleSenkaRanking.ViewModels
                     _isDefaultListing = false;
                 }
                 if (_server.Enabled) {
-                    string timeMarkup = _server.LastUpdateTime.Time.ToString("s");
+                    string timeMarkup = _server.LastUpdateTime.DateTime.ToString("s");
                     _state = new HtmlString(string.Format("<time datetime=\"{0}\">{1}</time>", timeMarkup, _server.LastUpdateTimeString));
                 } else {
                     _state = new HtmlString("情報なし");

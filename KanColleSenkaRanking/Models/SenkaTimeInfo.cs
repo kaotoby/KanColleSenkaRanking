@@ -8,14 +8,14 @@ namespace KanColleSenkaRanking.Models
     public class SenkaTimeInfo
     {
         public long ID { get { return _id; } }
-        public DateTime Time { get { return _time; } }
+        public DateTime DateTime { get { return _datetime; } }
 
         private long _id;
-        private DateTime _time;
+        private DateTime _datetime;
 
         public SenkaTimeInfo(object id, object time) {
             _id = Convert.ToInt64(id);
-            _time = Convert.ToDateTime(time);
+            _datetime = Convert.ToDateTime(time);
         }
     }
 }

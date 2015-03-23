@@ -1,44 +1,18 @@
-﻿@using KanColleSenkaRanking.Models
-@using Newtonsoft.Json;
+﻿@model KanColleSenkaRanking.ViewModels.PlayerViewModule
 @{
-    SenkaServerData server = ViewBag.Server;
-    SenkaData playerData = ViewBag.PlayerData;
-    IList<SenkaData> dataset = ViewBag.PlayerDataSet;
-    ChartData RankPointChart = ViewBag.RankPointChart;
-    ChartData RankingChart = ViewBag.RankingChart;
-    ChartData RankPointDeltaChart = ViewBag.RankPointDeltaChart;
-    string RankingClass = "";
-    if (playerData.Date != server.LastUpdateTime.Time) {
-        RankingClass = "hidden";
-    }
-    ViewBag.Keywords = string.Format(",{0},{1}", playerData.PlayerName, server.Name);
-    ViewBag.TitleSuffix = string.Format(" ({0}) - {1}", server.Name, MvcApplication.Name);
+    ViewBag.Keywords = string.Format(",{0},{1}", Model.Player.PlayerName, Model.Server.Name);
+    ViewBag.TitleSuffix = string.Format(" ({0}) - {1}", Model.Server.Name, MvcApplication.Name);
 }
-@section Scripts{
-    <script>
-        var PlayerCharts = [];
-        var PlayerName = '@playerData.PlayerName';
-        var rankLable = @Html.Raw(JsonConvert.SerializeObject(RankPointChart.Lables));
-        var rankPointData = @Html.Raw(RankPointChart.ToJsonString());
-        var rankingData = @Html.Raw(RankingChart.ToJsonString());
-
-        var rankPointDeltaLable = @Html.Raw(JsonConvert.SerializeObject(RankPointDeltaChart.Lables));
-        var rankPointDeltaData = @Html.Raw(RankPointDeltaChart.ToJsonString());
-    </script>
-    @Scripts.Render("~/bundles/ichart")
-    @Scripts.Render("~/bundles/player-chart")
-}
-
 <div class="page-header row">
     <div class="col-lg-8 col-md-7">
-        <h1>@playerData.PlayerName <br class="hidden-lg" /><small>@playerData.Comment</small></h1>
+        <h1>@Model.Player.PlayerName <br class="hidden-lg" /><small>@Model.Player.Comment</small></h1>
     </div>
     <div id="serverInfo" class="col-lg-4 col-md-5 move-right-md">
-        <span class="h4" id="serverInfoName">@server.Name</span><br class="hidden-sm hidden-xs" />
-        <span class="h4 @RankingClass">@(playerData.Ranking)位 <small>(@(playerData.RankPoint)戦果)</small></span><br class="hidden-sm hidden-xs" />
+        <span class="h4" id="serverInfoName">@Model.Server.Name</span><br class="hidden-sm hidden-xs" />
+        <span class="h4@(Model.RankingHtmlClass)">@(Model.Player.Ranking)位 <small>(@(Model.Player.RankPoint)戦果)</small></span><br class="hidden-sm hidden-xs" />
     </div>
     <div class="col-md-8">
-        <h4>司令部Level. @playerData.Level <small>[@(playerData.RankName)]</small></h4>
+        <h4>司令部Level. @Model.Player.Level <small>[@(Model.Player.RankName)]</small></h4>
     </div>
 </div>
 <!-- Activity -->
@@ -54,9 +28,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var data in dataset) {
+        @foreach (var data in Model.Activity) {
             <tr>
-                <td>@data.Date.ToString("yyyy年M月d日 H時")</td>
+                <td>@data.DateString</td>
                 <td>@data.Level</td>
                 <td>@data.Comment</td>
             </tr>
@@ -69,4 +43,17 @@
     <div id='rankingDeltaChart'></div>
     <div id='rankPointChart'></div>
 </div>
+@section Scripts{
+    <script>
+        var PlayerCharts = [];
+        var PlayerName = '@Model.Player.PlayerName';
+        var rankLable = @Html.Raw(Model.JRankLable);
+        var rankPointDeltaLable = @Html.Raw(Model.JRankPointDeltaLable);
 
+        var rankPointData = @Html.Raw(Model.JRankPointData);
+        var rankPointDeltaData = @Html.Raw(Model.JRankPointDeltaData);
+        var rankingData = @Html.Raw(Model.JRankingData);
+    </script>
+    @Scripts.Render("~/bundles/ichart")
+    @Scripts.Render("~/bundles/player-chart")
+}
