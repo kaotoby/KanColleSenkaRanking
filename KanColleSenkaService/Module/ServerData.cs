@@ -107,7 +107,6 @@ namespace KanColleSenkaService.Module
         public void InitializeUpdate() {
             UpdateDateInfo();
             ClearDataSet();
-            CheckDataBase();
         }
 
         public void AddData(SenkaData data) {
@@ -186,7 +185,7 @@ namespace KanColleSenkaService.Module
                         if (dataCount > 0) {
                             cmd.CommandText = _sqlDelete;
                             cmd.ExecuteNonQuery();
-                            log.Info(string.Format("[ServerID {0}] {1} data deleted and will be re-requested.", _id, dataCount));
+                            log.Info(string.Format("[ServerID {0}] {1} datas were deleted and have been re-requested.", _id, dataCount));
                         }
                     }
                     transaction.Commit();
@@ -199,6 +198,8 @@ namespace KanColleSenkaService.Module
             if (count != 990) {
                 log.Warn(string.Format("[ServerID {0}] Data count is {1}", _id, count));
             }
+
+            CheckDataBase();
             string _sql = @"INSERT INTO Senka VALUES " +
                 @"(@DateID, @ServerID, @Ranking, @Level, @PlayerName, @PlayerID, @Comment, @RankPoint, @RankType, @Medals)";
             using (var DataBaseConnection = KanColleSenkaManager.NewSQLiteConnection()) {
@@ -234,6 +235,36 @@ namespace KanColleSenkaService.Module
                         }
                     }
                     transaction.Commit();
+                }
+            }
+        }
+
+        public void SaveExpToDataBase() {
+            DateTime current = DateTime.UtcNow.AddHours(6);
+            DateTime lastday = new DateTime(current.Year, current.Month, 1, 15, 0, 0).AddMonths(1).AddDays(-1);
+
+            if (lastday == _date) {
+                string _sql = @"INSERT INTO Exp VALUES (@DateID, @PlayerID, @Exp)";
+                using (var DataBaseConnection = KanColleSenkaManager.NewSQLiteConnection()) {
+                    DataBaseConnection.Open();
+                    using (var transaction = DataBaseConnection.BeginTransaction()) {
+                        using (var cmd = new SQLiteCommand(_sql, DataBaseConnection)) {
+                            SQLiteParameter[] paras = new SQLiteParameter[3]{
+                            new SQLiteParameter("@DateID", DbType.Int64),
+                            new SQLiteParameter("@PlayerID", DbType.Int64),
+                            new SQLiteParameter("@Exp", DbType.Int64)
+                        };
+                            cmd.Parameters.AddRange(paras);
+
+                            foreach (var data in _dataSet) {
+                                cmd.Parameters["@DateID"].Value = _dateID;
+                                cmd.Parameters["@PlayerID"].Value = data.PlayerID;
+                                cmd.Parameters["@Exp"].Value = data.Exp;
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        transaction.Commit();
+                    }
                 }
             }
         }

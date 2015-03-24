@@ -32,6 +32,6 @@
     </tbody>
 </table>
 @if (Model.IsDefaultListing && Model.Server.Enabled) {
-    <a class="btn btn-default btn-xs" href="@(Request.RawUrl)?lm=990#rank99">1-990位</a>
+    <a class="btn btn-default btn-xs" href="@(Model.Server.Url)?lm=990#rank99">1-990位</a>
 }
 

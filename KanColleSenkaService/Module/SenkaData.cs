@@ -42,6 +42,10 @@ namespace KanColleSenkaService.Module
         /// The medals that player has. (Currently only 甲 medal)
         /// </summary>
         public int Medals { get { return int.Parse(_rawdata.api_medals); } }
+        /// <summary>
+        /// The player experience.
+        /// </summary>
+        public long Exp { get { return long.Parse(_rawdata.api_experience); } }
         #endregion
 
         #region Private Declarition

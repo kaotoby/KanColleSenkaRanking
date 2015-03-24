@@ -68,7 +68,7 @@
                         </ul>
                     </li>*@
                     @foreach (var server in manager.Servers.Values) {
-                        <li class="visible-xs@(server == ViewBag.Server ? " active" : "")"><a href="/server/@server.ID">@server.Name</a></li>
+                        <li class="visible-xs@(server == ViewBag.Server ? " active" : "")"><a href="@server.Url">@server.Name</a></li>
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -84,7 +84,7 @@
             <div class="col-sm-3 sidebar-offcanvas" id="sidebar">
                 <div class="list-group">
                     @foreach (var server in manager.Servers.Values) {
-                        <a href="/server/@server.ID" class="list-group-item@(server == ViewBag.Server ? " active" : "")">@server.Name</a>
+                        <a href="@server.Url" class="list-group-item@(server == ViewBag.Server ? " active" : "")">@server.Name</a>
                     }
                 </div>
             </div>

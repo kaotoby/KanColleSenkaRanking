@@ -37,6 +37,10 @@ namespace KanColleSenkaRanking.Models
         /// The server name.
         /// </summary>
         public string Name { get { return _name; } }
+        /// <summary>
+        /// The releative Url to for the server
+        /// </summary>
+        public string Url { get { return string.Format("/server/{0}", _id); } }
         #endregion
 
         #region Private Declarition

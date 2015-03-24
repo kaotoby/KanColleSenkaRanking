@@ -75,13 +75,13 @@ namespace KanColleSenkaService
                     if (i != currentRetryPage) {
                         currentRetryPage = i;
                         currentRetryCount = 0;
-                    } else if (currentRetryCount == 3) {
+                    } else if (currentRetryCount == 2) {
                         string errMsg = string.Format("[ServerID {0}] Page {1}, request failed!", serverdata.ID, i);
                         log.Error(errMsg);
                         throw new WebException(errMsg);
                     }
                     i--;
-                    Thread.Sleep(1000 * 3 * (int)Math.Pow(7, currentRetryCount++));
+                    Thread.Sleep(1000 * 3 * (int)Math.Pow(10, currentRetryCount++));
                 }
             }
 
@@ -90,6 +90,7 @@ namespace KanColleSenkaService
             serverdata.ErrorrCount = 0;
             serverdata.NextUpdateTime = newtime;
             serverdata.SaveToDataBase();
+            serverdata.SaveExpToDataBase();
             log.Info(string.Format("[ServerID {0}] Server update finished", serverdata.ID));
         }
 
