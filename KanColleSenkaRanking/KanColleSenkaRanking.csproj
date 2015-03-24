@@ -158,7 +158,6 @@
     <Compile Include="Models\SenkaData.cs" />
     <Compile Include="Models\SenkaManager\GetPlayerActivityList.cs" />
     <Compile Include="Models\SenkaManager\GetPlayerDataList.cs" />
-    <Compile Include="Models\SenkaManager\GetRankingList.cs" />
     <Compile Include="Models\SenkaManager\GetFullPlayerList.cs" />
     <Compile Include="Models\SenkaServerData.cs" />
     <Compile Include="Models\SenkaManager\SenkaManager.cs" />

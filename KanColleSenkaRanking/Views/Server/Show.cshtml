@@ -1,6 +1,7 @@
 ﻿@model KanColleSenkaRanking.ViewModels.ServerViewModule
 @{
-    ViewBag.Keywords = string.Format(",{0}", Model.Server.Name);               
+    ViewBag.Keywords = string.Format(",{0}", Model.Server.Name);
+    ViewBag.Description = Model.Description;
 }
 <div class="page-header">
     <h1>@Model.Server.Name <br class="visible-sm visible-xs" /><small>@Model.State</small></h1>

@@ -87,5 +87,118 @@ namespace KanColleSenkaRanking.Models
                 RefreshLastUpdateTime();
             }
         }
+
+        public bool GetDateID(DateTime date, out long dateID, out long compareDateID) {
+            if (date.Hour != 3 && date.Hour != 15) {
+                dateID = compareDateID = 0;
+                return false;
+            } else {
+                string _sql1 = "SELECT ID FROM Dates WHERE Date = @Date";
+                string _sql2 = "SELECT MAX(DateID) FROM Senka WHERE DateID < @DateID AND ServerID = " + _id.ToString();
+                try {
+                    using (var DataBaseConnection = SenkaManager.NewSQLiteConnection())
+                    using (var cmd = new SQLiteCommand(_sql1, DataBaseConnection)) {
+                        DataBaseConnection.Open();
+                        cmd.Parameters.Add(new SQLiteParameter("@Date", DbType.DateTime));
+                        cmd.Parameters["@Date"].Value = date;
+                        object _dateID = cmd.ExecuteScalar();
+                        if (_dateID != null) {
+                            dateID = Convert.ToInt64(_dateID);
+                            cmd.CommandText = _sql2;
+                            cmd.Parameters.Clear();
+                            cmd.Parameters.Add(new SQLiteParameter("@DateID", DbType.Int64));
+                            cmd.Parameters["@DateID"].Value = dateID;
+                            object _compareID = cmd.ExecuteScalar();
+                            if (_compareID != null) {
+                                compareDateID = Convert.ToInt64(_compareID);
+                            } else {
+                                throw new FormatException();
+                            }
+                        } else {
+                            throw new FormatException();
+                        }
+                    }
+                    return true;
+                } catch (Exception) {
+                    dateID = compareDateID = 0;
+                    return false;
+                }
+            }
+        }
+
+        public IList<SenkaData> GetRankingList(int limit) {
+            CheckForNewData();
+            return GetRankingList(limit, _lastUpdateTime.ID, _compareToTime.ID);
+        }
+
+        public IList<SenkaData> GetRankingList(int limit, long dateID, long compareDateID) {
+            List<SenkaData> latestDataset = new List<SenkaData>();
+            Dictionary<long, SenkaData> compareDataset = new Dictionary<long, SenkaData>();
+
+            //Don't need to check for new data again, due to it's benn signed already.
+            string serverSQL = " WHERE DateID = @DateID AND ServerID = @ServerID";
+            string latestSQL;
+            if (limit == 0) {
+                latestSQL = " AND (Ranking <= 100 OR Ranking = 500 OR Ranking = 990)";
+            } else {
+                latestSQL = " AND Ranking <= " + limit.ToString();
+            }
+            using (var DataBaseConnection = SenkaManager.NewSQLiteConnection())
+            using (var cmd = new SQLiteCommand(SenkaManager.DefaultSQL + serverSQL + latestSQL, DataBaseConnection)) {
+                DataBaseConnection.Open();
+                SQLiteParameter[] paras = new SQLiteParameter[2] {
+                        new SQLiteParameter("@DateID", DbType.Int64),
+                        new SQLiteParameter("@ServerID", DbType.Int32)
+                };
+                cmd.Parameters.AddRange(paras);
+                cmd.Parameters["@ServerID"].Value = _id;
+                cmd.Parameters["@DateID"].Value = dateID;
+                //Latest Data
+                using (var reader = cmd.ExecuteReader()) {
+                    while (reader.Read()) {
+                        Dictionary<string, object> data = new Dictionary<string, object>();
+                        data["Date"] = reader["Date"];
+                        data["Ranking"] = reader["Ranking"];
+                        data["Level"] = reader["Level"];
+                        data["PlayerName"] = reader["PlayerName"];
+                        data["PlayerID"] = reader["PlayerID"];
+                        data["Comment"] = reader["Comment"];
+                        data["RankPoint"] = reader["RankPoint"];
+                        data["Medals"] = reader["Medals"];
+                        data["RankName"] = reader["RankName"];
+                        latestDataset.Add(new SenkaData(data));
+                    }
+                }
+                //Compare Data
+                if (dateID != compareDateID) {
+                    cmd.CommandText = SenkaManager.DefaultSQL + serverSQL;
+                    cmd.Parameters["@DateID"].Value = compareDateID;
+                    using (var reader = cmd.ExecuteReader()) {
+                        while (reader.Read()) {
+                            Dictionary<string, object> data = new Dictionary<string, object>();
+                            data["Date"] = reader["Date"];
+                            data["Ranking"] = reader["Ranking"];
+                            data["Level"] = reader["Level"];
+                            data["PlayerName"] = reader["PlayerName"];
+                            data["PlayerID"] = reader["PlayerID"];
+                            data["Comment"] = reader["Comment"];
+                            data["RankPoint"] = reader["RankPoint"];
+                            data["RankName"] = reader["RankName"];
+                            data["Medals"] = reader["Medals"];
+                            SenkaData senkadata = new SenkaData(data);
+                            compareDataset.Add(senkadata.PlayerID, senkadata);
+                        }
+                    }
+
+                    foreach (var newdata in latestDataset) {
+                        long playerID = newdata.PlayerID;
+                        if (compareDataset.ContainsKey(playerID)) {
+                            newdata.SetDelta(compareDataset[playerID]);
+                        }
+                    }
+                }
+            }
+            return latestDataset.OrderBy(d => d.Ranking).ToList();
+        }
     }
 }

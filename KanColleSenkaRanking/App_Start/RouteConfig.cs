@@ -21,8 +21,8 @@ namespace KanColleSenkaRanking
 
             routes.MapRoute(
                 name: "Server",
-                url: "Server/{serverID}/{lm}",
-                defaults: new { controller = "Server", action = "Show", serverID = 0, lm = UrlParameter.Optional }
+                url: "Server/{serverID}",
+                defaults: new { controller = "Server", action = "Show", serverID = 0 }
             );
 
             routes.MapRoute(

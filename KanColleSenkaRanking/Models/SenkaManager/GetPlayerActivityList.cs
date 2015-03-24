@@ -12,7 +12,7 @@ namespace KanColleSenkaRanking.Models
         public IList<SenkaData> GetPlayerActivityList(long playerID, int limit) {
             List<SenkaData> dataset = new List<SenkaData>();
 
-            string _sql = "SELECT *, MIN(DateID) FROM (" + _defaultSQL + " WHERE PlayerID = @PlayerID)" +
+            string _sql = "SELECT *, MIN(DateID) FROM (" + DefaultSQL + " WHERE PlayerID = @PlayerID)" +
                 @" GROUP BY Comment, Level ORDER BY DateID DESC LIMIT " + limit.ToString();
 
             using (var DataBaseConnection = NewSQLiteConnection())

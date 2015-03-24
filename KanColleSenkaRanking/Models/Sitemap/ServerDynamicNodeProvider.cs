@@ -14,9 +14,7 @@ namespace KanColleSenkaRanking.Models
         public override IEnumerable<DynamicNode> GetDynamicNodeCollection(ISiteMapNode node) {
             foreach (var server in serverManager.Servers.Values) {
                 DynamicNode dynamicNode = new DynamicNode("Server" + server.ID.ToString(), server.Name);
-                if (server.Enabled) {
-                    dynamicNode.Description = string.Format("{0} {1}の戦果データ。", server.LastUpdateTimeString, server.Name);
-                } else {
+                if (!server.Enabled) {
                     dynamicNode.Description = "このサーバの情報今はありません。";
                 }
                 dynamicNode.ChangeFrequency = ChangeFrequency.Hourly;

@@ -16,7 +16,7 @@ namespace KanColleSenkaRanking.Models
 
             string serverSQL = " WHERE ServerID = @ServerID GROUP BY PlayerID";
             using (var DataBaseConnection = NewSQLiteConnection())
-            using (var cmd = new SQLiteCommand(_defaultSQL + serverSQL, DataBaseConnection)) {
+            using (var cmd = new SQLiteCommand(DefaultSQL + serverSQL, DataBaseConnection)) {
                 DataBaseConnection.Open();
                 SQLiteParameter[] paras = new SQLiteParameter[1] {
                         new SQLiteParameter("@ServerID", DbType.Int32)

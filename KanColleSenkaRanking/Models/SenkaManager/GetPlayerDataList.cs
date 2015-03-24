@@ -22,7 +22,7 @@ namespace KanColleSenkaRanking.Models
 
             string playerSQL = " WHERE PlayerID = @PlayerID AND Date > @DateStart AND Date < @DateEnd";
             using (var DataBaseConnection = NewSQLiteConnection())
-            using (var cmd = new SQLiteCommand(_defaultSQL + playerSQL, DataBaseConnection)) {
+            using (var cmd = new SQLiteCommand(DefaultSQL + playerSQL, DataBaseConnection)) {
                 DataBaseConnection.Open();
                 SQLiteParameter[] paras = new SQLiteParameter[3] {
                     new SQLiteParameter("@PlayerID", DbType.Int64),
@@ -84,7 +84,7 @@ namespace KanColleSenkaRanking.Models
                 @" AND Date > @DateStart AND Date <= @DateEnd" +
                 @" AND ServerID = @ServerID";
             using (var DataBaseConnection = NewSQLiteConnection())
-            using (var cmd = new SQLiteCommand(_defaultSQL + playerSQL, DataBaseConnection)) {
+            using (var cmd = new SQLiteCommand(DefaultSQL + playerSQL, DataBaseConnection)) {
                 DataBaseConnection.Open();
                 SQLiteParameter[] paras = new SQLiteParameter[5] {
                     new SQLiteParameter("@RankingUpper", DbType.Int32),

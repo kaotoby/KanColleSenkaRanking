@@ -1,12 +1,15 @@
 ﻿@using KanColleSenkaRanking.Models
 @{
     SenkaManager manager = DependencyResolver.Current.GetService<SenkaManager>();
-    string AppName = MvcApplication.Name;
     string PageTitle = MvcSiteMapProvider.SiteMaps.Current.CurrentNode.Title;
-    if (ViewBag.TitleSuffix == null) {
-        PageTitle += " - " + AppName;
+    if (string.IsNullOrEmpty(ViewBag.Title)) {
+        PageTitle += " - " + MvcApplication.Name;
     } else {
-        PageTitle += ViewBag.TitleSuffix;
+        PageTitle = ViewBag.Title;
+    }
+    string PageDescription = MvcSiteMapProvider.SiteMaps.Current.CurrentNode.Description;
+    if (!string.IsNullOrEmpty(ViewBag.Description)) {
+        PageDescription = ViewBag.Description;
     }
 }
 <!DOCTYPE html>
@@ -15,7 +18,7 @@
     <title>@PageTitle</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="description" content="@MvcSiteMapProvider.SiteMaps.Current.CurrentNode.Description">
+    <meta name="description" content="@PageDescription">
     <meta name="keywords" content="戦果基地,戦果速報,戦果,ランキング,艦これ,艦隊これくしょん@(ViewBag.Keywords)">
     <script>
         /*GoogleAnalytics*/
@@ -52,7 +55,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="cl-white">サーバ</span>
                 </button>
-                @Html.ActionLink(AppName, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink(MvcApplication.Name, "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -100,7 +103,7 @@
         </div>
         <hr />
         <footer class="text-right">
-            <p>&copy; @DateTime.Now.Year - @AppName</p>
+            <p>&copy; @DateTime.Now.Year - @MvcApplication.Name</p>
             <p id="performance">Page created in <span id="elapsed"></span> ms with <a href="http://www.asp.net/mvc">ASP.NET MVC</a></p>
         </footer>
     </div>
