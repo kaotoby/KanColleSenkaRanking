@@ -59,9 +59,9 @@ namespace KanColleSenkaRanking.Models
 
         public void RefreshLastUpdateTime() {
             string _sql = "SELECT Dates.* FROM Senka" +
-                @" JOIN Dates ON Senka.DateID = Dates.ID" +
-                @" WHERE ServerID = " + _id.ToString() +
-                @" GROUP BY Date ORDER BY Dates.ID DESC LIMIT 2";
+                        @" JOIN Dates ON Senka.DateID = Dates.ID" +
+                        @" WHERE ServerID = " + _id.ToString() +
+                        @" GROUP BY Date ORDER BY Dates.ID DESC LIMIT 2";
 
             using (var DataBaseConnection = SenkaManager.NewSQLiteConnection())
             using (var cmd = new SQLiteCommand(_sql, DataBaseConnection)) {
@@ -127,7 +127,6 @@ namespace KanColleSenkaRanking.Models
         }
 
         public IList<SenkaData> GetRankingList(int limit) {
-            CheckForNewData();
             return GetRankingList(limit, _lastUpdateTime.ID, _compareToTime.ID);
         }
 
@@ -135,7 +134,6 @@ namespace KanColleSenkaRanking.Models
             List<SenkaData> latestDataset = new List<SenkaData>();
             Dictionary<long, SenkaData> compareDataset = new Dictionary<long, SenkaData>();
 
-            //Don't need to check for new data again, due to it's benn signed already.
             string serverSQL = " WHERE DateID = @DateID AND ServerID = @ServerID";
             string latestSQL;
             if (limit == 0) {
@@ -199,6 +197,83 @@ namespace KanColleSenkaRanking.Models
                 }
             }
             return latestDataset.OrderBy(d => d.Ranking).ToList();
+        }
+
+        public IList<SenkaData> GetFullPlayerList() {
+            List<SenkaData> playerList = new List<SenkaData>();
+            if (!_enabled) return playerList;
+
+            string serverSQL = " WHERE ServerID = @ServerID GROUP BY PlayerID";
+            using (var DataBaseConnection = SenkaManager.NewSQLiteConnection())
+            using (var cmd = new SQLiteCommand(SenkaManager.DefaultSQL + serverSQL, DataBaseConnection)) {
+                DataBaseConnection.Open();
+                SQLiteParameter[] paras = new SQLiteParameter[1] {
+                        new SQLiteParameter("@ServerID", DbType.Int32)
+                };
+                cmd.Parameters.AddRange(paras);
+                cmd.Parameters["@ServerID"].Value = _id;
+                //Latest Data
+                using (var reader = cmd.ExecuteReader()) {
+                    while (reader.Read()) {
+                        Dictionary<string, object> data = new Dictionary<string, object>();
+                        data["Date"] = reader["Date"];
+                        data["Ranking"] = reader["Ranking"];
+                        data["Level"] = reader["Level"];
+                        data["PlayerName"] = reader["PlayerName"];
+                        data["PlayerID"] = reader["PlayerID"];
+                        data["Comment"] = reader["Comment"];
+                        data["RankPoint"] = reader["RankPoint"];
+                        data["Medals"] = reader["Medals"];
+                        data["RankName"] = reader["RankName"];
+                        playerList.Add(new SenkaData(data));
+                    }
+                }
+            }
+            return playerList;
+        }
+
+        public IDictionary<int, Dictionary<DateTime, SenkaData>> GetServerBoundDic() {
+            List<SenkaData> dataset = new List<SenkaData>();
+            DateTime now = DateTime.UtcNow.AddHours(9); //UTC+9 JST
+            DateTime start = new DateTime(now.Year, now.Month, 1);
+            DateTime end = start.AddMonths(1).AddMinutes(-1);
+
+            string serverSQL = " WHERE ServerID = @ServerID" + 
+                            @" AND Date > @DateStart" + 
+                            @" AND Date < @DateEnd" + 
+                            @" AND Ranking IN (1,5,20,100,500)";
+            using (var DataBaseConnection = SenkaManager.NewSQLiteConnection())
+            using (var cmd = new SQLiteCommand(SenkaManager.DefaultSQL + serverSQL, DataBaseConnection)) {
+                DataBaseConnection.Open();
+                SQLiteParameter[] paras = new SQLiteParameter[3] {
+                        new SQLiteParameter("@ServerID", DbType.Int32),
+                        new SQLiteParameter("@DateStart", DbType.DateTime),
+                        new SQLiteParameter("@DateEnd", DbType.DateTime)
+                };
+                cmd.Parameters.AddRange(paras);
+                cmd.Parameters["@ServerID"].Value = _id;
+                cmd.Parameters["@DateStart"].Value = start;
+                cmd.Parameters["@DateEnd"].Value = end;
+                using (var reader = cmd.ExecuteReader()) {
+                    while (reader.Read()) {
+                        Dictionary<string, object> data = new Dictionary<string, object>();
+                        data["Date"] = reader["Date"];
+                        data["Ranking"] = reader["Ranking"];
+                        data["Level"] = reader["Level"];
+                        data["PlayerName"] = reader["PlayerName"];
+                        data["PlayerID"] = reader["PlayerID"];
+                        data["Comment"] = reader["Comment"];
+                        data["RankPoint"] = reader["RankPoint"];
+                        data["Medals"] = reader["Medals"];
+                        data["RankName"] = reader["RankName"];
+                        dataset.Add(new SenkaData(data));
+                    }
+                }
+            }
+
+            return dataset.GroupBy(d => d.Ranking)
+                .OrderBy(d => d.Key)
+                .ToDictionary(d => d.Key, d => d.OrderBy(v => v.Date).ToDictionary(v => v.Date, v => v));
         }
     }
 }

@@ -13,13 +13,14 @@ namespace KanColleSenkaRanking.Models
 
         public override IEnumerable<DynamicNode> GetDynamicNodeCollection(ISiteMapNode node) {
             foreach (var server in serverManager.Servers.Values) {
-                IList<SenkaData> playerList = serverManager.GetFullPlayerList(server.ID);
+                IList<SenkaData> playerList = server.GetFullPlayerList();
                 foreach (var player in playerList) {
                     DynamicNode dynamicNode = new DynamicNode();
                     dynamicNode.Title = player.PlayerName;
-                    dynamicNode.Description = string.Format("{0} {1} ({2})の戦果データ。", server.LastUpdateTimeString, player.PlayerName, server.Name);
+                    dynamicNode.Description = string.Format("{0} ({1})の戦果データ。", player.PlayerName, server.Name);
 
-                    dynamicNode.ChangeFrequency = ChangeFrequency.Hourly;
+                    dynamicNode.ChangeFrequency = ChangeFrequency.Daily;
+                    dynamicNode.UpdatePriority = UpdatePriority.Low;
                     dynamicNode.RouteValues.Add("playerID", player.PlayerID);
                     dynamicNode.ParentKey = "Server" + server.ID.ToString();
 

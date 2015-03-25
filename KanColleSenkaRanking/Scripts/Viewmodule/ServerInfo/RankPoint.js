@@ -1,19 +1,19 @@
 ﻿// -----------------------------
-// Player Rank Point Chart
+// Server Rank Point Chart
 // -----------------------------
 
-PlayerCharts.push(function (width, height) {
+ServerCharts.push(function (width, height) {
+    var startColor = 10;
     rankPointData[0].color = '#B5A262';
-    rankPointData[1].color = '#101010';
-    rankPointData[0].line_width = 2;
-    if (rankPointData.length == 3) {
-        rankPointData[2].color = '#808080';
-    }
+    rankPointData[1].color = '#808080';
+    rankPointData[2].color = '#606060';
+    rankPointData[3].color = '#404040';
+    rankPointData[4].color = '#202020';
     var data = rankPointData.slice(0);
 
     var chart = new iChart.Area2D({
         render: 'rankPointChart',
-        data: data.reverse(),
+        data: data,
         title: {
             text: '戦果値',
             font: 'HGrgm',
@@ -25,13 +25,13 @@ PlayerCharts.push(function (width, height) {
         height: height,
         padding: '20px',
         border: false,
+        background_color: false,
         footnote: {
             text: FootNote,
             font: 'HGrgm',
             color: '#505050',
             offsety: 10
         },
-        background_color: false,
         legend: {
             enable: true,
             row: 1,//设置在一行上显示，与column配合使用
@@ -50,56 +50,35 @@ PlayerCharts.push(function (width, height) {
             listeners: {
                 //tip:提示框对象、name:数据名称、value:数据值、text:当前文本、i:数据点的索引
                 parseText: function (tip, name, value, text, i) {
-                    var tipdata = {};
-                    if (typeof name != 'undefined') {
-                        if (name == rankPointData[0].name) {
-                            tipdata.string = '<span class="cl-brown h5 font-bold">' + PlayerName + ' ' + rankingData[0].value[i] + '位';
-                            tipdata.priority = 0.5;
-                        } else if (name == rankPointData[1].name) {
-                            tipdata.string = '<span class="cl-dark-gray h5">' + name;
-                            tipdata.priority = 0.1;
-                        } else {
-                            tipdata.string = '<span class="cl-gray h5">' + name;
-                            tipdata.priority = 0.3;
-                        }
-                        tipdata.string += ' ' + value + '</span>';
-                        tipdata.value = value;
+                    var prefix;
+                    if (name == '1位') {
+                        prefix = '<span class="h5 cl-brown">' + topPlayerName[i];
                     } else {
-                        tipdata.string = '<span class="cl-brown h5 font-bold"><span>' + PlayerName + ' データなし</span>';
+                        prefix = '<span class="h5">' + name;
                     }
-                    return tipdata;
+                    return prefix + ' <span class="font-bold">' + value + '</span></span>';
                 }
             }
         },
         tipMocker: function (tips, idx) {
             //tips:线段的提示文本的数组、i:数据点的索引
             var time;
-            var tipsData = [];
             var tipString = '';
-            for (var i = 0; i < tips.length; i++) {
-                tipsData.push(tips[i]);
-            }
-            tipsData.sort(function (a, b) {
-                if (a.value == b.value) {
-                    return b.value - a.value + b.priority - a.priority;
-                }
-                return b.value - a.value;
-            });
-            if (rankLable[idx] == '') {
+            if (rankPointLable[idx] == '') {
                 if (idx == 0) {
-                    time = (parseInt(rankLable[idx + 1]) - 1) + "日 15時"
+                    time = (parseInt(rankPointLable[idx + 1]) - 1) + "日 15時"
                 } else {
-                    time = rankLable[idx - 1] + "日 15時"
+                    time = rankPointLable[idx - 1] + "日 15時"
                 }
             } else {
-                time = rankLable[idx] + "日 3時"
+                time = rankPointLable[idx] + "日 3時"
             }
             tipString = '<span>' + time + '</span>';
             for (var i = 0; i < tips.length; i++) {
-                tipString += '<br/>' + tipsData[i].string;
+                tipString += '<br/>' + tips[i];
             }
 
-            return '<div class="text-right font-bold">' + tipString + '</div>';
+            return '<div class="text-right">' + tipString + '</div>';
         },
         crosshair: {
             enable: true,
@@ -108,7 +87,7 @@ PlayerCharts.push(function (width, height) {
         },
         sub_option: {
             label: false,
-            point_size: 9
+            point_size: 7
         },
         listeners: {
             /**
@@ -135,7 +114,7 @@ PlayerCharts.push(function (width, height) {
             }, {
                 position: 'bottom',
                 start_scale: 1,
-                labels: rankLable,
+                labels: rankPointLable,
                 label: { color: '#505050', fontweight: 600 }
             }]
         }
@@ -155,7 +134,7 @@ PlayerCharts.push(function (width, height) {
             .textFont('600 14px HGrgm')
             .fillText('戦果', x - 40, y - 12, false, '#B5A262')
             .textBaseline('top')
-            .fillText('日', x + w + 10, y + h + 6, false, '#B5A262');
+            .fillText('(日)', x + w + 10, y + h + 6, false, '#B5A262');
         }
     }));
     chart.draw();

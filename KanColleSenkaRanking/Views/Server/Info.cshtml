@@ -1,0 +1,27 @@
+﻿@model KanColleSenkaRanking.ViewModels.ServerInfoViewModel
+@{
+    ViewBag.Keywords = string.Format(",{0}", Model.Server.Name);
+}
+<div class="page-header">
+    <h1>@Model.Server.Name</h1>
+</div>
+<a id="bigButton" class="btn btn-primary btn-lg btn-block" href="@(Model.Server.Url)/ranking"><span>ランキングへ</span></a>
+<!-- Charts -->
+<div id="chartArea">
+    <div id='rankPointDeltaAvgChart'></div>
+    <div id='rankPointChart'></div>
+</div>
+@section Scripts{
+    <script>
+        var ServerCharts = [];
+        var FootNote= '@Model.Server.LastUpdateTimeString';
+        var rankPointLable = @Html.Raw(Model.JRankPointLable);
+        var rankDeltaLable = @Html.Raw(Model.JRankPointDeltaAvgLable);
+        var rankPointData = @Html.Raw(Model.JRankPointData);
+        var rankDeltaData = @Html.Raw(Model.JRankPointDeltaAvgData);
+        var topPlayerName = @Html.Raw(Model.JTopPlayerName);
+        var lastUpdateTime = '@Model.Server.LastUpdateTimeString';
+    </script>
+    @Scripts.Render("~/bundles/ichart")
+    @Scripts.Render("~/bundles/serverInfo")
+}

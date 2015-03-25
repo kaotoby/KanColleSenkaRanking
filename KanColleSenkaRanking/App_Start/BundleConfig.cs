@@ -9,7 +9,8 @@ namespace KanColleSenkaRanking
         public static void RegisterBundles(BundleCollection bundles) {
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery.transit.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
@@ -18,10 +19,13 @@ namespace KanColleSenkaRanking
                       "~/Scripts/ichart.{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/viewmodule").Include(
-                      "~/Scripts/viewmodule/viewmodule.js"));
+                      "~/Scripts/Viewmodule/viewmodule.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/player-chart").Include(
-                      "~/Scripts/viewmodule/player/*.js"));
+            bundles.Add(new ScriptBundle("~/bundles/player").Include(
+                      "~/Scripts/Viewmodule/Player/*.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/serverInfo").Include(
+                      "~/Scripts/Viewmodule/ServerInfo/*.js"));
 
             bundles.Add(new StyleBundle("~/styles/bootstrap")
                 .Include("~/Content/bootstrap.css"));

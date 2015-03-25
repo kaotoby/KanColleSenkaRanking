@@ -31,5 +31,16 @@ namespace KanColleSenkaRanking.Models
             }
             return stringWriter.ToString();
         }
+
+        public static double[] ValueConveter(List<int> values) {
+            if (values.Count == 0) {
+                return new double[0];
+            } else if (values.Count == 1 && values[0] == ChartData.NONE) {
+                return new double[1] { 0 };
+            } else {
+                double min = values.Min();
+                return values.Select(v => v == ChartData.NONE ? min + 0.1 : v).ToArray();
+            }
+        }
     }
 }

@@ -16,5 +16,9 @@ namespace KanColleSenkaRanking.Models
         public ChartJsonData(string _name) {
             name = _name;
         }
+
+        public void SetValue(List<int> values) {
+            value = ChartData.ValueConveter(values);
+        }
     }
 }

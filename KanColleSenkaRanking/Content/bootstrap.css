@@ -255,8 +255,8 @@ th {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('Content/fonts/glyphicons-halflings-regular.eot');
-  src: url('Content/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('Content/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('Content/fonts/glyphicons-halflings-regular.woff') format('woff'), url('Content/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('Content/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('/Content/fonts/glyphicons-halflings-regular.eot');
+  src: url('/Content/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/Content/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('/Content/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/Content/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/Content/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -1240,7 +1240,7 @@ h6 .small,
 }
 h1,
 .h1 {
-  font-size: 40px;
+  font-size: 36px;
 }
 h2,
 .h2 {
@@ -3182,9 +3182,9 @@ fieldset[disabled] .btn-info.active {
   background-color: #ffffff;
 }
 .btn-warning {
-  color: #ffffff;
-  background-color: #f0ad4e;
-  border-color: #eea236;
+  color: #b5a262;
+  background-color: #ffffff;
+  border-color: #e6e6e6;
 }
 .btn-warning:hover,
 .btn-warning:focus,
@@ -3192,9 +3192,9 @@ fieldset[disabled] .btn-info.active {
 .btn-warning:active,
 .btn-warning.active,
 .open > .dropdown-toggle.btn-warning {
-  color: #ffffff;
-  background-color: #ec971f;
-  border-color: #d58512;
+  color: #b5a262;
+  background-color: #e6e6e6;
+  border-color: #c7c7c7;
 }
 .btn-warning:active,
 .btn-warning.active,
@@ -3219,12 +3219,12 @@ fieldset[disabled] .btn-warning:active,
 .btn-warning.disabled.active,
 .btn-warning[disabled].active,
 fieldset[disabled] .btn-warning.active {
-  background-color: #f0ad4e;
-  border-color: #eea236;
+  background-color: #ffffff;
+  border-color: #e6e6e6;
 }
 .btn-warning .badge {
-  color: #f0ad4e;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #b5a262;
 }
 .btn-danger {
   color: #ffffff;
@@ -5099,14 +5099,14 @@ a.thumbnail.active {
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
 }
-a.list-group-item {
+div.list-group-item {
   color: #577492;
 }
-a.list-group-item .list-group-item-heading {
+div.list-group-item .list-group-item-heading {
   color: #333333;
 }
-a.list-group-item:hover,
-a.list-group-item:focus {
+div.list-group-item:hover,
+div.list-group-item:focus {
   text-decoration: none;
   color: #577492;
   background-color: #f5f5f5;

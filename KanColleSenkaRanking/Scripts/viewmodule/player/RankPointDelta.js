@@ -4,25 +4,19 @@
 
 PlayerCharts.push(function (width, height) {
     var mixdata = [];
-    var amMin = GetMinScale(rankPointDeltaData[0].value);
-    var pmMin = GetMinScale(rankPointDeltaData[1].value);
     var avg = 0.0;
     var count = 0;
     for (var i = 0; i < rankPointDeltaData[0].value.length; i++) {
-        var am = rankPointDeltaData[0].value[i];
-        var pm = rankPointDeltaData[1].value[i];
         var sum = 0;
-        if (am == amMin + 0.1) {
-            rankPointDeltaData[0].value[i] = 0;
-        } else {
-            sum += am;
+        for (var a = 0; a < 2; a++) {
+            var v = rankPointDeltaData[a].value[i];
+            if ((v * 10) % 10 != 0) {
+                rankPointDeltaData[a].value[i] = 0;
+            } else {
+                sum += v;
+            }
         }
-        if (pm == pmMin + 0.1) {
-            rankPointDeltaData[1].value[i] = 0;
-        } else {
-            sum += pm;
-        }
-        avg = avg + sum;
+        avg += sum;
         count++;
         mixdata.push(sum)
     }
@@ -40,7 +34,7 @@ PlayerCharts.push(function (width, height) {
     rankPointDeltaData[0].color = '#AA985A';
     rankPointDeltaData[1].color = '#4A432A';
     var chart = new iChart.ColumnStacked2D({
-        render: 'rankingDeltaChart',
+        render: 'rankPointDeltaChart',
         data: rankPointDeltaData,
         labels: rankPointDeltaLable,
         title: {
@@ -51,6 +45,11 @@ PlayerCharts.push(function (width, height) {
         },
         border: false,
         shadow: true,
+        footnote: {
+            text: FootNote,
+            font: 'HGrgm',
+            color: '#505050',
+        },
         shadow_blur: 3,
         shadow_color: '#1F1E11',
         shadow_offsetx: 1,
@@ -114,7 +113,7 @@ PlayerCharts.push(function (width, height) {
                 .textFont('600 14px HGrgm')
                 .fillText('戦果', x - 40, y - 12, false, '#B5A262')
                 .textBaseline('top')
-                .fillText('(日)', x + w + 5, y + h + 5, false, '#B5A262');
+                .fillText('日', x + w + 5, y + h + 5, false, '#B5A262');
             if (avg != 0) {
                 chart.target
                     .globalAlpha(0.2)

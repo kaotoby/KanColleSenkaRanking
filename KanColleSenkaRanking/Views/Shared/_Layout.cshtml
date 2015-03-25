@@ -84,11 +84,16 @@
     <div class="container">
         <div class="row row-offcanvas row-offcanvas-left">
             <!-- Left SideBar -->
-            <div class="col-sm-3 sidebar-offcanvas" id="sidebar">
-                <div class="list-group">
-                    @foreach (var server in manager.Servers.Values) {
-                        <a href="@server.Url" class="list-group-item@(server == ViewBag.Server ? " active" : "")">@server.Name</a>
-                    }
+            <div class="col-sm-3 hidden-xs" id="sidebar">
+                <div id="affix">
+                    <div class="list-group">
+                        @foreach (var server in manager.Servers.Values) {
+                            <div class="list-group-item clickable@(server == ViewBag.Server ? " active" : "")" data-href="@(server.Url)/ranking">
+                                @server.Name
+                                <span class="pull-right btn btn-xs btn-warning clickable hidden-sm" data-href="@(server.Url)" title="サーバ情報"><span class="glyphicon glyphicon-stats"></span></span>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
             <!-- Left SideBar End -->
@@ -99,13 +104,13 @@
                 <!-- Body -->
                 @RenderBody()
                 <!-- Body End-->
+                <hr />
+                <footer class="text-right">
+                    <p>&copy; @DateTime.Now.Year - @MvcApplication.Name</p>
+                    <p id="performance">Page created in <span id="elapsed"></span> ms with <a href="http://www.asp.net/mvc">ASP.NET MVC</a></p>
+                </footer>
             </div>
         </div>
-        <hr />
-        <footer class="text-right">
-            <p>&copy; @DateTime.Now.Year - @MvcApplication.Name</p>
-            <p id="performance">Page created in <span id="elapsed"></span> ms with <a href="http://www.asp.net/mvc">ASP.NET MVC</a></p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

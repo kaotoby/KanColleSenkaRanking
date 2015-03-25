@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace KanColleSenkaRanking.ViewModels
 {
-    public class PlayerViewModule
+    public class PlayerViewModel
     {
         public SenkaData Player { get { return _playerData; } }
         public SenkaServerData Server { get { return _server; } }
@@ -49,14 +49,11 @@ namespace KanColleSenkaRanking.ViewModels
         private ChartData _rankPointChart;
         private SenkaManager serverManager = DependencyResolver.Current.GetService<SenkaManager>();
 
-        public PlayerViewModule(long playerID) {
+        public PlayerViewModel(long playerID) {
             IList<SenkaData> chartDataSet = serverManager.GetPlayerDataList(playerID, out _server);
             if (_server != null) {
-                IList<ChartData> charts = GetPlayerCharts(chartDataSet, _server.ID);
+                CreatePlayerCharts(chartDataSet);
                 _playerData = chartDataSet.Last();
-                _rankingChart = charts[0];
-                _rankPointDeltaChart = charts[1];
-                _rankPointChart = charts[2];
                 _activity = serverManager.GetPlayerActivityList(playerID, 3);
 
                 if (_playerData.Date != _server.LastUpdateTime.DateTime) {
@@ -67,8 +64,8 @@ namespace KanColleSenkaRanking.ViewModels
             }
         }
 
-        public IList<ChartData> GetPlayerCharts(IList<SenkaData> datas, int serverID) {
-            IList<SenkaData> bound = serverManager.GetPlayerBoundList(serverID, datas.Last());
+        public void CreatePlayerCharts(IList<SenkaData> datas) {
+            IList<SenkaData> bound = serverManager.GetPlayerBoundList(_server.ID, datas.Last());
             Dictionary<int, Dictionary<DateTime, SenkaData>> boundDic = bound
                 .GroupBy(r => r.Ranking)
                 .ToDictionary(
@@ -79,12 +76,10 @@ namespace KanColleSenkaRanking.ViewModels
             int lower = boundDic.Keys.Max();
 
             #region Declare
-            List<ChartData> chartdata = new List<ChartData>();
-            ChartData _rankPointChartData = new ChartData();
-            ChartData _rankingChartData = new ChartData();
-            ChartData _rankingDeltaChartData = new ChartData();
+            _rankingChart = new ChartData();
+            _rankPointDeltaChart = new ChartData();
+            _rankPointChart = new ChartData();
             SenkaData lastData = datas.Last();
-
             ChartJsonData _rankPointData = new ChartJsonData(string.Format("{0}({1}位)", lastData.PlayerName, lastData.Ranking));
             ChartJsonData _rankingaData = new ChartJsonData("順位");
             ChartJsonData _deltaAM = new ChartJsonData("3～15時");
@@ -105,7 +100,7 @@ namespace KanColleSenkaRanking.ViewModels
             Dictionary<DateTime, SenkaData> dic = datas.ToDictionary(d => d.Date, d => d);
             DateTime end = boundDic[lower].Keys.Max();
             DateTime last = boundDic[lower].Keys.Min();
-            DateTime date = new DateTime(last.Year, last.Month, last.Day, last.Hour, 0, 0);
+            DateTime date = last;
             if (last.Hour == 3 && last.Day != 1) {
                 deltaAMValues.Add(ChartData.NONE);
             }
@@ -165,12 +160,12 @@ namespace KanColleSenkaRanking.ViewModels
                 deltaPMValues.Clear();
             }
 
-            _upperData.value = ValueConveter(upperValues);
-            _lowerData.value = ValueConveter(lowerValues);
-            _rankPointData.value = ValueConveter(rankPointValues);
-            _rankingaData.value = ValueConveter(rankingValues);
-            _deltaAM.value = ValueConveter(deltaAMValues);
-            _deltaPM.value = ValueConveter(deltaPMValues);
+            _upperData.SetValue(upperValues);
+            _lowerData.SetValue(lowerValues);
+            _rankPointData.SetValue(rankPointValues);
+            _rankingaData.SetValue(rankingValues);
+            _deltaAM.SetValue(deltaAMValues);
+            _deltaPM.SetValue(deltaPMValues);
 
             ChartJsonData[] _rankPointChartJsonData;
             if (upperValues.Count == 0) {
@@ -179,25 +174,9 @@ namespace KanColleSenkaRanking.ViewModels
                 _rankPointChartJsonData = new ChartJsonData[3] { _rankPointData, _lowerData, _upperData };
             }
 
-            _rankPointChartData.SetData(_rankPointChartJsonData, lables.ToArray());
-            _rankingChartData.SetData(new ChartJsonData[1] { _rankingaData }, lables.ToArray());
-            _rankingDeltaChartData.SetData(new ChartJsonData[2] { _deltaAM, _deltaPM }, deltaLables.ToArray());
-
-            chartdata.Add(_rankingChartData);
-            chartdata.Add(_rankingDeltaChartData);
-            chartdata.Add(_rankPointChartData);
-            return chartdata;
-        }
-
-        private double[] ValueConveter(List<int> values) {
-            if (values.Count == 0) {
-                return new double[0];
-            } else if (values.Count == 1 && values[0] == ChartData.NONE) {
-                return new double[1] { 0 };
-            } else {
-                double min = values.Min();
-                return values.Select(v => v == ChartData.NONE ? min + 0.1 : v).ToArray();
-            }
+            _rankingChart.SetData(new ChartJsonData[1] { _rankingaData }, lables.ToArray());
+            _rankPointDeltaChart.SetData(new ChartJsonData[2] { _deltaAM, _deltaPM }, deltaLables.ToArray());
+            _rankPointChart.SetData(_rankPointChartJsonData, lables.ToArray());
         }
     }
 }

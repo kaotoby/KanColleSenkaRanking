@@ -11,18 +11,37 @@ namespace KanColleSenkaRanking.Controllers
 {
     public class ServerController : Controller
     {
+
 #if !DEBUG
         [OutputCache(Duration = 600, VaryByParam = "serverID;lm;d", Location = OutputCacheLocation.Server)]
 #endif
-        [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerDynamicNodeProvider, KanColleSenkaRanking")]
-        public ActionResult Show(int serverID, int lm = 0, string d = null) {
+        [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerInfoDynamicNodeProvider, KanColleSenkaRanking")]
+        public ActionResult Info(int serverID) {
+            ServerInfoViewModel model = new ServerInfoViewModel(serverID);
+            ViewBag.Server = model.Server;
+            if (serverID == 0) {
+                return View("InfoAll");
+            } else {
+                if (model.Server.Enabled) {
+                    return View(model);
+                } else {
+                    return View("InfoNoData", model);
+                }
+            }
+        }
+
+#if !DEBUG
+        [OutputCache(Duration = 600, VaryByParam = "serverID;lm;d", Location = OutputCacheLocation.Server)]
+#endif
+        [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerRankingDynamicNodeProvider, KanColleSenkaRanking")]
+        public ActionResult Ranking(int serverID, int lm = 0, string d = null) {
             //lm = limit, d = date
             if (serverID == 0) {
-                return View("Dashboard");
+                return View("RankingAll");
             } else {
-                ServerViewModule module = new ServerViewModule(serverID, lm, d);
-                ViewBag.Server = module.Server;
-                return View(module);
+                ServerRankingViewModel model = new ServerRankingViewModel(serverID, lm, d);
+                ViewBag.Server = model.Server;
+                return View(model);
             }
         }
     }

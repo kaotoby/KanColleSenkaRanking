@@ -1,7 +1,7 @@
-﻿@model KanColleSenkaRanking.ViewModels.PlayerViewModule
+﻿@model KanColleSenkaRanking.ViewModels.PlayerViewModel
 @{
     ViewBag.Keywords = string.Format(",{0},{1}", Model.Player.PlayerName, Model.Server.Name);
-    ViewBag.TitleSuffix = string.Format(" ({0}) - {1}", Model.Server.Name, MvcApplication.Name);
+    ViewBag.Title = string.Format("{0} ({1}) - {2}", Model.Player.PlayerName, Model.Server.Name, MvcApplication.Name);
 }
 <div class="page-header row">
     <div class="col-lg-8 col-md-7">
@@ -38,12 +38,13 @@
 <!-- Charts -->
 <div id="chartArea">
     <div id='rankingChart'></div>
-    <div id='rankingDeltaChart'></div>
+    <div id='rankPointDeltaChart'></div>
     <div id='rankPointChart'></div>
 </div>
 @section Scripts{
     <script>
         var PlayerCharts = [];
+        var FootNote= '@(Model.Player.PlayerName + " " + Model.Server.LastUpdateTimeString)';
         var PlayerName = '@Model.Player.PlayerName';
         var rankLable = @Html.Raw(Model.JRankLable);
         var rankPointDeltaLable = @Html.Raw(Model.JRankPointDeltaLable);
@@ -51,7 +52,7 @@
         var rankPointData = @Html.Raw(Model.JRankPointData);
         var rankPointDeltaData = @Html.Raw(Model.JRankPointDeltaData);
         var rankingData = @Html.Raw(Model.JRankingData);
-    </script>
+</script>
     @Scripts.Render("~/bundles/ichart")
-    @Scripts.Render("~/bundles/player-chart")
+    @Scripts.Render("~/bundles/player")
 }

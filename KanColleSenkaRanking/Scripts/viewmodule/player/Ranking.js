@@ -6,7 +6,7 @@ PlayerCharts.push(function (width, height) {
     var max = GetMaxScale(rankingData[0].value);
     var min = GetMinScale(rankingData[0].value);
     var scale = GetScaleSpace(min, max);
-    var from0 = min == 1;
+    var from0 = (min == 1);
     max += scale;
     min -= scale
     var extMax = Math.floor(max / scale) * scale;
@@ -36,6 +36,12 @@ PlayerCharts.push(function (width, height) {
             offsety: -10
         },
         border: false,
+        footnote: {
+            text: FootNote,
+            font: 'HGrgm',
+            color: '#505050',
+            offsety: 15
+        },
         width: width,
         height: height * 1.2,
         padding: '50px',
@@ -87,9 +93,8 @@ PlayerCharts.push(function (width, height) {
             * j:序号 从0开始
             */
             parsePoint: function (d, v, x, y, j) {
-                var val = 2 * extMax - v;
-                val = Math.round(val * 10) / 10;
-                if (val == min + scale + 0.1)
+                val = Math.round(v * 10) / 10;
+                if ((val * 10) % 10 != 0)
                     return { ignored: true };
             }
         },
@@ -137,7 +142,7 @@ PlayerCharts.push(function (width, height) {
             .textFont('600 14px HGrgm')
             .fillText('順位', x - 40, y - 12, false, '#B5A262')
             .textBaseline('top')
-            .fillText('(日)', x + w + 10, y + h + 6, false, '#B5A262');
+            .fillText('日', x + w + 10, y + h + 6, false, '#B5A262');
         }
     }));
     chart.draw();

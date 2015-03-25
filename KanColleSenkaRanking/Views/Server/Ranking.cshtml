@@ -1,5 +1,6 @@
-﻿@model KanColleSenkaRanking.ViewModels.ServerViewModule
+﻿@model KanColleSenkaRanking.ViewModels.ServerRankingViewModel
 @{
+    ViewBag.Title = string.Format("{0} (ランキング) - {1}", Model.Server.Name, MvcApplication.Name);
     ViewBag.Keywords = string.Format(",{0}", Model.Server.Name);
     ViewBag.Description = Model.Description;
 }
@@ -20,7 +21,7 @@
     </thead>
     <tbody>
         @foreach (var data in Model.RankingDataSet) {
-            <tr id="rank@(data.Ranking)" class="clickable-row" data-href="/player/@data.PlayerID">
+            <tr id="rank@(data.Ranking)" class="clickable" data-href="/player/@data.PlayerID">
                 <td>@(data.Ranking)位 <span class="@data.RankingDelta.HtmlClass">@data.RankingDelta.Value</span></td>
                 <td>@data.Level</td>
                 <td>@data.PlayerName</td>

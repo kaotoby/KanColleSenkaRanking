@@ -16,7 +16,7 @@ namespace KanColleSenkaRanking.Controllers
 #endif
         [MvcSiteMapNodeAttribute(DynamicNodeProvider = "KanColleSenkaRanking.Models.PlayerDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Show(long playerID) {
-            PlayerViewModule module = new PlayerViewModule(playerID);
+            PlayerViewModel module = new PlayerViewModel(playerID);
             if (module.Server == null) {
                 ViewBag.PlayerID = playerID;
                 return RedirectToAction("NoResult");

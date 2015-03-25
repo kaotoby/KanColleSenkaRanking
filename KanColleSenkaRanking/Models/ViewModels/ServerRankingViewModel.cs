@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace KanColleSenkaRanking.ViewModels
 {
-    public class ServerViewModule
+    public class ServerRankingViewModel
     {
         public bool IsDefaultListing { get { return _isDefaultListing; } }
         public SenkaServerData Server { get { return _server; } }
@@ -23,12 +23,13 @@ namespace KanColleSenkaRanking.ViewModels
         private SenkaManager serverManager = DependencyResolver.Current.GetService<SenkaManager>();
         private string _description;
 
-        public ServerViewModule(int serverID, int limit, string date) {
+        public ServerRankingViewModel(int serverID, int limit, string date) {
             if (serverManager.Servers.Keys.Contains(serverID)) {
                 _server = serverManager.Servers[serverID];
                 if (_server.Enabled) {
                     DateTime d;
                     if (date == null) {
+                        _server.CheckForNewData();
                         d = _server.LastUpdateTime.DateTime;
                         _rankingDataSet = _server.GetRankingList(limit);
                     } else {
@@ -44,8 +45,10 @@ namespace KanColleSenkaRanking.ViewModels
                     string timeMarkup = d.ToString("s");
                     string timeString = d.ToString("yyyy年M月d日 H時");
                     _state = new HtmlString(string.Format("<time datetime=\"{0}\">{1}</time>", timeMarkup, timeString));
-                    _description = string.Format("{0} {1}の戦果データ。", timeString, _server.Name);
                     _isDefaultListing = (limit == 0);
+                    if (!string.IsNullOrEmpty(date)) {
+                        _description = string.Format("{0} {1}の戦果データ。", timeString, _server.Name);
+                    }
                 } else {
                     _rankingDataSet = new List<SenkaData>();
                     _state = new HtmlString("情報なし");
