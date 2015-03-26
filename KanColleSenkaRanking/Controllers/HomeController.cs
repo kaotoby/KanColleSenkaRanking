@@ -12,16 +12,30 @@ namespace KanColleSenkaRanking.Controllers
     {
         private SenkaManager serverManager = DependencyResolver.Current.GetService<SenkaManager>();
 
-#if !DEBUG
-        [OutputCache(Duration = 3600)]
-#endif
         public ActionResult Index() {
-            ViewBag.DevStateData = DevStateData.GetFromFile();
-            ViewBag.ServerList = serverManager.Servers.Values;
             return View();
         }
 
+        [ChildActionOnly] //no cache
+        public PartialViewResult Announcement() {
+            return PartialView();
+        }
 
+        [ChildActionOnly]
+        [OutputCache(Duration = 7200)] //2 hour
+        public PartialViewResult DevState() {
+            ViewBag.DevStateData = DevStateData.GetFromFile();
+            return PartialView();
+        }
+
+        [ChildActionOnly]
+        [OutputCache(Duration = 7200)] //2 hour
+        public PartialViewResult ServerList() {
+            ViewBag.ServerList = serverManager.Servers.Values;
+            return PartialView();
+        }
+
+        //rarely access, no cache
         [MvcSiteMapNodeAttribute(Title = "開発ツール", ParentKey = "Home",
             Description = "戦果基地使用された開発ツール。")]
         public ActionResult DevTool() {

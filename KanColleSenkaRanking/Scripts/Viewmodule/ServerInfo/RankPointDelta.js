@@ -23,7 +23,7 @@ ServerCharts.push(function (width, height) {
             font: 'HGrgm',
             fontsize: 24,
             color: '#505050',
-            offsety: -20
+            offsety: -15
         },
         padding: '50px',
         width: width,
@@ -36,7 +36,7 @@ ServerCharts.push(function (width, height) {
             text: FootNote,
             font: 'HGrgm',
             color: '#505050',
-            offsety: 20
+            offsety: 15
         },
         shadow_blur: 3,
         shadow_color: '#1F1E11',
@@ -56,7 +56,7 @@ ServerCharts.push(function (width, height) {
             valign: 'top',
             background_color: false,
             offsetx: 5000 / width,
-            offsety: 5000 / height,
+            offsety: -3000 / height,
             border: false,
             font: 'HGrgm',
             fontsize: 13
