@@ -14,7 +14,7 @@
 @section Scripts{
     <script>
         var ServerCharts = [];
-        var FootNote= '@Model.Server.LastUpdateTimeString';
+        var FootNote= '@string.Format("{0} {1}", Model.Server.Name, Model.Server.LastUpdateTimeString)';
         var rankPointLable = @Html.Raw(Model.JRankPointLable);
         var rankDeltaLable = @Html.Raw(Model.JRankPointDeltaAvgLable);
         var rankPointData = @Html.Raw(Model.JRankPointData);

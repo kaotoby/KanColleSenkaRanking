@@ -88,8 +88,8 @@ namespace KanColleSenkaRanking.ViewModels
                     if ((date - last).Hours == 12) {
                         foreach (var key in dic.Keys) {
                             int delta = dic[key][date].RankPoint - dic[key][last].RankPoint;
-                            if (date.Hour == 3) rankDeltaValue[key][0].Add(delta);
-                            else rankDeltaValue[key][1].Add(delta);
+                            if (date.Hour == 3) rankDeltaValue[key][1].Add(delta);
+                            else rankDeltaValue[key][0].Add(delta);
                         }
                     }
                     last = date;

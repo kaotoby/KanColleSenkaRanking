@@ -11,27 +11,32 @@ using log4net;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace KanColleSenkaService
 {
     public class KanColleSenkaManager
     {
+        public IList<ServerData> Servers { get { return _servers; } }
+
+        private IList<ServerData> _servers;
+        private DateTime _date;
+        private long _dateID;
         private static readonly ILog log = LogManager.GetLogger(typeof(KanColleSenkaManager).FullName);
 
         public static SQLiteConnection NewSQLiteConnection() {
             return new SQLiteConnection(@"Data Source=|DataDirectory|kansenka.db;Version=3;New=False;Compress=True;");
         }
 
-
-        public IList<ServerData> GetServerData() {
-            List<ServerData> serverdata = new List<ServerData>();
+        public KanColleSenkaManager() {
+            _servers = new List<ServerData>();
             string _sql = @"SELECT * FROM Servers";
             using (var DataBaseConnection = NewSQLiteConnection())
             using (var cmd = new SQLiteCommand(_sql, DataBaseConnection)) {
                 DataBaseConnection.Open();
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        serverdata.Add(new ServerData(
+                        _servers.Add(new ServerData(
                             reader["ID"],
                             reader["Name"],
                             reader["UserName"],
@@ -39,15 +44,44 @@ namespace KanColleSenkaService
                     }
                 }
             }
-            foreach (var server in serverdata) {
+            foreach (var server in _servers) {
                 server.GetToken();
             }
-            return serverdata;
+        }
+
+        public void UpdateDateInfo() {
+            DateTime current = DateTime.UtcNow.AddHours(6);
+            if (current.Hour >= 12) {
+                _date = new DateTime(current.Year, current.Month, current.Day, 15, 0, 0);
+            } else {
+                _date = new DateTime(current.Year, current.Month, current.Day, 3, 0, 0);
+            }
+
+            string _sqlSelect = "SELECT ID FROM Dates WHERE Date = @Date";
+            string _sqlInsert = "INSERT INTO Dates (Date) VALUES (@Date)";
+            string _sqlSelectID = "SELECT MAX(ID) FROM Dates";
+            using (var DataBaseConnection = KanColleSenkaManager.NewSQLiteConnection())
+            using (var cmd = new SQLiteCommand(_sqlSelect, DataBaseConnection)) {
+                DataBaseConnection.Open();
+                SQLiteParameter date = new SQLiteParameter("@Date", DbType.DateTime);
+                cmd.Parameters.Add(date);
+                cmd.Parameters["@Date"].Value = _date;
+                object id = cmd.ExecuteScalar();
+                if (id != null) {
+                    _dateID = Convert.ToInt64(id);
+                } else {
+                    cmd.CommandText = _sqlInsert;
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = _sqlSelectID;
+                    cmd.Parameters.Clear();
+                    _dateID = Convert.ToInt64(cmd.ExecuteScalar());
+                }
+            }
         }
 
         public void ProcessServerData(ServerData serverdata) {
             log.Debug(string.Format("[ServerID {0}] Server update started", serverdata.ID));
-            serverdata.InitializeUpdate();
+            serverdata.InitializeUpdate(_date, _dateID);
 
             HttpHelper helper = new HttpHelper();
             Random rand = new Random();

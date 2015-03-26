@@ -23,11 +23,11 @@ ServerCharts.push(function (width, height) {
             font: 'HGrgm',
             fontsize: 24,
             color: '#505050',
-            offsety: -10
+            offsety: -20
         },
         padding: '50px',
         width: width,
-        height: height * 1.2,
+        height: height * 1.5,
         border: false,
         shadow: true,
         default_mouseover_css: false,
@@ -36,7 +36,7 @@ ServerCharts.push(function (width, height) {
             text: FootNote,
             font: 'HGrgm',
             color: '#505050',
-            offsety: 15
+            offsety: 20
         },
         shadow_blur: 3,
         shadow_color: '#1F1E11',
@@ -56,7 +56,7 @@ ServerCharts.push(function (width, height) {
             valign: 'top',
             background_color: false,
             offsetx: 5000 / width,
-            offsety: -5000 / height,
+            offsety: 5000 / height,
             border: false,
             font: 'HGrgm',
             fontsize: 13

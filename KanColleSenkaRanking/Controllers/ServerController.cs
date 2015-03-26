@@ -17,11 +17,11 @@ namespace KanColleSenkaRanking.Controllers
 #endif
         [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerInfoDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Info(int serverID) {
-            ServerInfoViewModel model = new ServerInfoViewModel(serverID);
-            ViewBag.Server = model.Server;
             if (serverID == 0) {
                 return View("InfoAll");
             } else {
+                ServerInfoViewModel model = new ServerInfoViewModel(serverID);
+                ViewBag.Server = model.Server;
                 if (model.Server.Enabled) {
                     return View(model);
                 } else {

@@ -14,22 +14,23 @@ namespace KanColleSenkaService
     class KanColleSenkaService
     {
         public bool Inprocess { get; set; }
+
         private Timer timer1;
-        private static IList<ServerData> datalist;
-        private static KanColleSenkaManager sm = new KanColleSenkaManager();
+        private KanColleSenkaManager sm;
 
         private static readonly ILog log = LogManager.GetLogger(typeof(KanColleSenkaService).FullName);
 
         public KanColleSenkaService() {
             Inprocess = false;
-            datalist = sm.GetServerData();
+            sm = new KanColleSenkaManager();
             timer1 = new Timer(TimerTick, null, 3000, 10000);
         }
 
         private void TimerTick(object stats) {
             if (!Inprocess) {
                 var now = DateTime.Now;
-                var updates = datalist.Where(data => data.Enabled && data.NextUpdateTime <= now);
+                var updates = sm.Servers.Where(data => data.Enabled && data.NextUpdateTime <= now);
+                sm.UpdateDateInfo();
                 Parallel.ForEach(updates, data =>
                 {
 #if DEBUG

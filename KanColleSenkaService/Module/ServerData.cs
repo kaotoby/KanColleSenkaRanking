@@ -104,47 +104,14 @@ namespace KanColleSenkaService.Module
             NextUpdateTime = DateTime.Now;
         }
 
-        public void InitializeUpdate() {
-            UpdateDateInfo();
-            ClearDataSet();
-        }
-
         public void AddData(SenkaData data) {
             _dataSet.Add(data);
         }
 
-        public void ClearDataSet() {
+        public void InitializeUpdate(DateTime date, long dateID) {
             _dataSet.Clear();
-        }
-
-        public void UpdateDateInfo() {
-            DateTime current = DateTime.UtcNow.AddHours(6);
-            if (current.Hour >= 12) {
-                _date = new DateTime(current.Year, current.Month, current.Day, 15, 0, 0);
-            } else {
-                _date = new DateTime(current.Year, current.Month, current.Day, 3, 0, 0);
-            }
-
-            string _sqlSelect = "SELECT ID FROM Dates WHERE Date = @Date";
-            string _sqlInsert = "INSERT INTO Dates (Date) VALUES (@Date)";
-            string _sqlSelectID = "SELECT MAX(ID) FROM Dates";
-            using (var DataBaseConnection = KanColleSenkaManager.NewSQLiteConnection())
-            using (var cmd = new SQLiteCommand(_sqlSelect, DataBaseConnection)) {
-                DataBaseConnection.Open();
-                SQLiteParameter date = new SQLiteParameter("@Date", DbType.DateTime);
-                cmd.Parameters.Add(date);
-                cmd.Parameters["@Date"].Value = _date;
-                object id = cmd.ExecuteScalar();
-                if (id != null) {
-                    _dateID = Convert.ToInt64(id);
-                } else {
-                    cmd.CommandText = _sqlInsert;
-                    cmd.ExecuteNonQuery();
-                    cmd.CommandText = _sqlSelectID;
-                    cmd.Parameters.Clear();
-                    _dateID = Convert.ToInt64(cmd.ExecuteScalar());
-                }
-            }
+            _date = date;
+            _dateID = dateID;
         }
 
         public void GetToken() {
@@ -153,7 +120,9 @@ namespace KanColleSenkaService.Module
 
             DMMLoginHelper helper = new DMMLoginHelper(_username, _password, _id);
 #if DEBUG
-            helper.Process(out _ip, out _apiToken, out _apiStartTime);
+            if (_id == 19) {
+                helper.Process(out _ip, out _apiToken, out _apiStartTime);
+            }
 #else
             try {
                 helper.Process(out _ip, out _apiToken, out _apiStartTime);

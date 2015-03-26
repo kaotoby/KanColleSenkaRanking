@@ -49,6 +49,7 @@ PlayerCharts.push(function (width, height) {
             text: FootNote,
             font: 'HGrgm',
             color: '#505050',
+            offsety: 10
         },
         shadow_blur: 3,
         shadow_color: '#1F1E11',

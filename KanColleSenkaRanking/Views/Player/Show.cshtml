@@ -44,7 +44,7 @@
 @section Scripts{
     <script>
         var PlayerCharts = [];
-        var FootNote= '@(Model.Player.PlayerName + " " + Model.Server.LastUpdateTimeString)';
+        var FootNote= '@string.Format("{0} ({1}) {2}", Model.Player.PlayerName, Model.Server.Name, Model.Server.LastUpdateTimeString)';
         var PlayerName = '@Model.Player.PlayerName';
         var rankLable = @Html.Raw(Model.JRankLable);
         var rankPointDeltaLable = @Html.Raw(Model.JRankPointDeltaLable);
