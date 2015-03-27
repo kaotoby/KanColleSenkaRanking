@@ -14,7 +14,7 @@ namespace KanColleSenkaRanking.Controllers
 #if !DEBUG
         [OutputCache(Duration = 600, VaryByParam = "playerID", Location = OutputCacheLocation.Server)]
 #endif
-        [MvcSiteMapNodeAttribute(DynamicNodeProvider = "KanColleSenkaRanking.Models.PlayerDynamicNodeProvider, KanColleSenkaRanking")]
+        [MvcSiteMapNodeAttribute(DynamicNodeProvider = "KanColleSenkaRanking.SiteMap.PlayerDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Show(long playerID) {
             PlayerViewModel module = new PlayerViewModel(playerID);
             if (module.Server == null) {

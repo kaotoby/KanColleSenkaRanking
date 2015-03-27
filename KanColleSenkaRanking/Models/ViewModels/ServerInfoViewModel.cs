@@ -61,9 +61,9 @@ namespace KanColleSenkaRanking.ViewModels
             _topPlayerName = new List<string>();
             _rankPointChart = new ChartData();
             _rankPointDeltaAvgChart = new ChartData();
-            ChartJsonData[] _rankPoint = new ChartJsonData[dic.Count];
-            ChartJsonData _avgAM = new ChartJsonData("3～15時");
-            ChartJsonData _avgPM = new ChartJsonData("15～27時");
+            ChartData.JsonData[] _rankPoint = new ChartData.JsonData[dic.Count];
+            ChartData.JsonData _avgAM = new ChartData.JsonData("3～15時");
+            ChartData.JsonData _avgPM = new ChartData.JsonData("15～27時");
 
             DateTime last = dic[1].First().Key;
             DateTime end = dic[1].Last().Key;
@@ -109,7 +109,7 @@ namespace KanColleSenkaRanking.ViewModels
             }
             for (int i = 0; i < dic.Count; i++) {
                 int key = dic.ElementAt(i).Key;
-                _rankPoint[i] = new ChartJsonData(key.ToString() + "位");
+                _rankPoint[i] = new ChartData.JsonData(key.ToString() + "位");
                 _rankPoint[i].SetValue(rankPointValue[key]);
             }
             _rankPointChart.SetData(_rankPoint, lables.ToArray());
@@ -118,7 +118,7 @@ namespace KanColleSenkaRanking.ViewModels
             _avgPM.value = rankDeltaValue.Select(d => Math.Round(d.Value[1].Average(), 1)).ToArray();
             var avgLabel = dic.Select(d=>d.Key.ToString() + "位").ToArray();
 
-            _rankPointDeltaAvgChart.SetData(new ChartJsonData[2] { _avgAM, _avgPM }, avgLabel);
+            _rankPointDeltaAvgChart.SetData(new ChartData.JsonData[2] { _avgAM, _avgPM }, avgLabel);
         }
     }
 }

@@ -27,7 +27,7 @@ ServerCharts.push(function (width, height) {
         },
         padding: '50px',
         width: width,
-        height: height * 1.5,
+        height: height * 1.2,
         border: false,
         shadow: true,
         default_mouseover_css: false,
@@ -56,7 +56,7 @@ ServerCharts.push(function (width, height) {
             valign: 'top',
             background_color: false,
             offsetx: 5000 / width,
-            offsety: -3000 / height,
+            offsety: -5000 / height,
             border: false,
             font: 'HGrgm',
             fontsize: 13

@@ -24,15 +24,15 @@ namespace KanColleSenkaRanking.Controllers
         [ChildActionOnly]
         [OutputCache(Duration = 7200)] //2 hour
         public PartialViewResult DevState() {
-            ViewBag.DevStateData = DevStateData.GetFromFile();
-            return PartialView();
+            IEnumerable<DevStateData> model = DevStateData.GetFromFile();
+            return PartialView(model);
         }
 
         [ChildActionOnly]
         [OutputCache(Duration = 7200)] //2 hour
         public PartialViewResult ServerList() {
-            ViewBag.ServerList = serverManager.Servers.Values;
-            return PartialView();
+            IEnumerable<SenkaServerData> model = serverManager.Servers.Values;
+            return PartialView(model);
         }
 
         //rarely access, no cache

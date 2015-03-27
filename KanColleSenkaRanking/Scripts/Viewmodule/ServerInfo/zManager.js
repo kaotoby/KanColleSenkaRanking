@@ -1,7 +1,7 @@
 ﻿$(function () {
     $(window).resize(function () {
         var width = $('#chartArea').width();
-        var height = width / 2;
+        var height = width * 1.2 / 2;
         for (var i = 0; i < ServerCharts.length; i++) {
             ServerCharts[i](width, height);
         }

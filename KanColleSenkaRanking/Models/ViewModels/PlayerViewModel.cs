@@ -80,12 +80,12 @@ namespace KanColleSenkaRanking.ViewModels
             _rankPointDeltaChart = new ChartData();
             _rankPointChart = new ChartData();
             SenkaData lastData = datas.Last();
-            ChartJsonData _rankPointData = new ChartJsonData(string.Format("{0}({1}位)", lastData.PlayerName, lastData.Ranking));
-            ChartJsonData _rankingaData = new ChartJsonData("順位");
-            ChartJsonData _deltaAM = new ChartJsonData("3～15時");
-            ChartJsonData _deltaPM = new ChartJsonData("15～27時");
-            ChartJsonData _upperData = new ChartJsonData(string.Format("{0}位", upper));
-            ChartJsonData _lowerData = new ChartJsonData(string.Format("{0}位", lower));
+            ChartData.JsonData _rankPointData = new ChartData.JsonData(string.Format("{0}({1}位)", lastData.PlayerName, lastData.Ranking));
+            ChartData.JsonData _rankingaData = new ChartData.JsonData("順位");
+            ChartData.JsonData _deltaAM = new ChartData.JsonData("3～15時");
+            ChartData.JsonData _deltaPM = new ChartData.JsonData("15～27時");
+            ChartData.JsonData _upperData = new ChartData.JsonData(string.Format("{0}位", upper));
+            ChartData.JsonData _lowerData = new ChartData.JsonData(string.Format("{0}位", lower));
 
             List<string> lables = new List<string>();
             List<string> deltaLables = new List<string>();
@@ -167,15 +167,15 @@ namespace KanColleSenkaRanking.ViewModels
             _deltaAM.SetValue(deltaAMValues);
             _deltaPM.SetValue(deltaPMValues);
 
-            ChartJsonData[] _rankPointChartJsonData;
+            ChartData.JsonData[] _rankPointChartJsonData;
             if (upperValues.Count == 0) {
-                _rankPointChartJsonData = new ChartJsonData[2] { _rankPointData, _lowerData };
+                _rankPointChartJsonData = new ChartData.JsonData[2] { _rankPointData, _lowerData };
             } else {
-                _rankPointChartJsonData = new ChartJsonData[3] { _rankPointData, _lowerData, _upperData };
+                _rankPointChartJsonData = new ChartData.JsonData[3] { _rankPointData, _lowerData, _upperData };
             }
 
-            _rankingChart.SetData(new ChartJsonData[1] { _rankingaData }, lables.ToArray());
-            _rankPointDeltaChart.SetData(new ChartJsonData[2] { _deltaAM, _deltaPM }, deltaLables.ToArray());
+            _rankingChart.SetData(new ChartData.JsonData[1] { _rankingaData }, lables.ToArray());
+            _rankPointDeltaChart.SetData(new ChartData.JsonData[2] { _deltaAM, _deltaPM }, deltaLables.ToArray());
             _rankPointChart.SetData(_rankPointChartJsonData, lables.ToArray());
         }
     }

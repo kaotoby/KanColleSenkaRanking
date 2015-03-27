@@ -1,11 +1,12 @@
-﻿using MvcSiteMapProvider;
+﻿using KanColleSenkaRanking.Models;
+using MvcSiteMapProvider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace KanColleSenkaRanking.Models
+namespace KanColleSenkaRanking.SiteMap
 {
     public class PlayerDynamicNodeProvider : DynamicNodeProviderBase
     {
@@ -20,7 +21,7 @@ namespace KanColleSenkaRanking.Models
                     dynamicNode.Description = string.Format("{0} ({1})の戦果データ。", player.PlayerName, server.Name);
 
                     dynamicNode.ChangeFrequency = ChangeFrequency.Daily;
-                    dynamicNode.UpdatePriority = UpdatePriority.Low;
+                    dynamicNode.UpdatePriority = UpdatePriority.Absolute_040; //Below Normal
                     dynamicNode.RouteValues.Add("playerID", player.PlayerID);
                     dynamicNode.ParentKey = "Server" + server.ID.ToString();
 

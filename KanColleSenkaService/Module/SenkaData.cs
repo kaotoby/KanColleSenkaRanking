@@ -45,7 +45,7 @@ namespace KanColleSenkaService.Module
         /// <summary>
         /// The player experience.
         /// </summary>
-        public long Exp { get { return long.Parse(_rawdata.api_experience); } }
+        public int Exp { get { return int.Parse(_rawdata.api_experience); } }
         #endregion
 
         #region Private Declarition

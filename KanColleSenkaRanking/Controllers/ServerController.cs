@@ -15,13 +15,12 @@ namespace KanColleSenkaRanking.Controllers
 #if !DEBUG
         [OutputCache(Duration = 600, VaryByParam = "serverID;lm;d", Location = OutputCacheLocation.Server)]
 #endif
-        [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerInfoDynamicNodeProvider, KanColleSenkaRanking")]
+        [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.SiteMap.ServerInfoDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Info(int serverID) {
             if (serverID == 0) {
                 return View("InfoAll");
             } else {
                 ServerInfoViewModel model = new ServerInfoViewModel(serverID);
-                ViewBag.Server = model.Server;
                 if (model.Server.Enabled) {
                     return View(model);
                 } else {
@@ -33,14 +32,13 @@ namespace KanColleSenkaRanking.Controllers
 #if !DEBUG
         [OutputCache(Duration = 600, VaryByParam = "serverID;lm;d", Location = OutputCacheLocation.Server)]
 #endif
-        [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.Models.ServerRankingDynamicNodeProvider, KanColleSenkaRanking")]
+        [MvcSiteMapNodeAttribute(ParentKey = "Server", DynamicNodeProvider = "KanColleSenkaRanking.SiteMap.ServerRankingDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Ranking(int serverID, int lm = 0, string d = null) {
             //lm = limit, d = date
             if (serverID == 0) {
                 return View("RankingAll");
             } else {
                 ServerRankingViewModel model = new ServerRankingViewModel(serverID, lm, d);
-                ViewBag.Server = model.Server;
                 return View(model);
             }
         }

@@ -152,16 +152,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ChartJsonData.cs" />
     <Compile Include="Models\DevStateData.cs" />
     <Compile Include="Models\ChartData.cs" />
     <Compile Include="Models\SenkaData.cs" />
     <Compile Include="Models\SenkaServerData.cs" />
     <Compile Include="Models\SenkaManager.cs" />
     <Compile Include="Models\SenkaTimeInfo.cs" />
-    <Compile Include="Models\Sitemap\PlayerDynamicNodeProvider.cs" />
-    <Compile Include="Models\Sitemap\ServerInfoDynamicNodeProvider.cs" />
-    <Compile Include="Models\Sitemap\ServerRankingDynamicNodeProvider.cs" />
+    <Compile Include="Models\SiteMap\PlayerDynamicNodeProvider.cs" />
+    <Compile Include="Models\SiteMap\ServerInfoDynamicNodeProvider.cs" />
+    <Compile Include="Models\SiteMap\ServerRankingDynamicNodeProvider.cs" />
     <Compile Include="Models\TextWithStyle.cs" />
     <Compile Include="Models\ViewModels\PlayerViewModel.cs" />
     <Compile Include="Models\ViewModels\ServerInfoViewModel.cs" />

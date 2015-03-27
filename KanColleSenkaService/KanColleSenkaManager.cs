@@ -12,6 +12,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Data;
+using System.IO;
 
 namespace KanColleSenkaService
 {
@@ -128,10 +129,11 @@ namespace KanColleSenkaService
             log.Info(string.Format("[ServerID {0}] Server update finished", serverdata.ID));
         }
 
-        public bool BatchParse(string jsonString, ServerData serverdata, int page) {
+        public bool BatchParse(string rawJsonString, ServerData serverdata, int page) {
             JObject jsonData;
+            string jsonString = rawJsonString.Replace("svdata=", "");
             try {
-                jsonData = JObject.Parse(jsonString.Replace("svdata=", ""));
+                jsonData = JObject.Parse(jsonString);
                 JValue jsonResult = (JValue)jsonData["api_result"];
                 if (Convert.ToInt32(jsonResult.Value) == 1) {
                     IList<JToken> results = jsonData["api_data"]["api_list"].Children().ToList();
@@ -139,6 +141,8 @@ namespace KanColleSenkaService
                         ApiSenkaResult apiResult = JsonConvert.DeserializeObject<ApiSenkaResult>(result.ToString());
                         serverdata.AddData(new SenkaData(apiResult));
                     }
+                    // Save To File
+                    File.AppendAllText(serverdata.LogPath, jsonString + "\r\n");
                 } else {
                     throw new WebException(jsonString);
                 }

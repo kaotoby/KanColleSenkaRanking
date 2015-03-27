@@ -43,7 +43,7 @@ PlayerCharts.push(function (width, height) {
             offsety: 15
         },
         width: width,
-        height: height * 1.5,
+        height: height * 1.2,
         padding: '50px',
         shadow: true,
         shadow_color: '#B5A262',

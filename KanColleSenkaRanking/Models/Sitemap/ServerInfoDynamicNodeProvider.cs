@@ -1,11 +1,12 @@
-﻿using MvcSiteMapProvider;
+﻿using KanColleSenkaRanking.Models;
+using MvcSiteMapProvider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace KanColleSenkaRanking.Models
+namespace KanColleSenkaRanking.SiteMap
 {
     public class ServerInfoDynamicNodeProvider : DynamicNodeProviderBase
     {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +80,14 @@ namespace KanColleSenkaService.Module
                 }
             }
         }
+        /// <summary>
+        /// The log file path to be saved.
+        /// </summary>
+        public string LogPath {
+            get {
+                return string.Format(@"{0}[S{1:D2}]{2:yyMMddHH}.log", _logpdir, _id, _date);
+            }
+        }
         #endregion
 
         #region Private Declarition
@@ -93,6 +102,7 @@ namespace KanColleSenkaService.Module
         private string _password;
         private int _errorCount = 0;
         private List<SenkaData> _dataSet = new List<SenkaData>();
+        private string _logpdir = AppDomain.CurrentDomain.BaseDirectory + @"SenkaLog\";
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerData).FullName);
         #endregion
 
@@ -112,6 +122,9 @@ namespace KanColleSenkaService.Module
             _dataSet.Clear();
             _date = date;
             _dateID = dateID;
+            if (File.Exists(this.LogPath)) {
+                File.Delete(this.LogPath);
+            }
         }
 
         public void GetToken() {
@@ -221,7 +234,7 @@ namespace KanColleSenkaService.Module
                             SQLiteParameter[] paras = new SQLiteParameter[3]{
                             new SQLiteParameter("@DateID", DbType.Int64),
                             new SQLiteParameter("@PlayerID", DbType.Int64),
-                            new SQLiteParameter("@Exp", DbType.Int64)
+                            new SQLiteParameter("@Exp", DbType.Int32)
                         };
                             cmd.Parameters.AddRange(paras);
 

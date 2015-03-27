@@ -1,7 +1,4 @@
-﻿@using KanColleSenkaRanking.Models
-@{
-    IList<DevStateData> dataset = ViewBag.DevStateData;
-}
+﻿@model IEnumerable<KanColleSenkaRanking.Models.DevStateData>
 <!-- Develope State -->
 <h2>開発状態</h2>
 <table class="table table-condensed">
@@ -15,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var data in dataset) {
+        @foreach (var data in Model) {
             <tr>
                 <td class="@data.TypeText.HtmlClass">@data.TypeText.Value</td>
                 <td>@data.Name</td>

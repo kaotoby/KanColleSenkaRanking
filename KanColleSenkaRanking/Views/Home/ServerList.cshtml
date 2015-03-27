@@ -1,14 +1,10 @@
-﻿@using KanColleSenkaRanking.Models
-@{
-    ICollection<SenkaServerData> servers = ViewBag.ServerList;
-    IList<SenkaServerData> disabledServers = servers.Where(s => !s.Enabled).ToList();
-}
+﻿@model IEnumerable<KanColleSenkaRanking.Models.SenkaServerData>
 <!-- Server List -->
 <h3>
     データがないのサーバ
 </h3>
 <ul class="h4">
-    @foreach (var server in disabledServers) {
+    @foreach (var server in Model.Where(s => !s.Enabled)) {
         <li>@server.Name</li>
     }
 </ul>

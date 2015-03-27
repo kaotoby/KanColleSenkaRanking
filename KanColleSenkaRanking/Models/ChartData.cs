@@ -10,14 +10,14 @@ namespace KanColleSenkaRanking.Models
 {
     public class ChartData
     {
-        public ChartJsonData[] Data { get { return _data; } }
+        public JsonData[] Data { get { return _data; } }
         public string[] Lables { get { return _lables; } }
         public const int NONE = int.MaxValue;
 
-        private ChartJsonData[] _data;
+        private JsonData[] _data;
         private string[] _lables;
 
-        public void SetData(ChartJsonData[] data, string[] lables) {
+        public void SetData(JsonData[] data, string[] lables) {
             _data = data;
             _lables = lables;
         }
@@ -40,6 +40,23 @@ namespace KanColleSenkaRanking.Models
             } else {
                 double min = values.Min();
                 return values.Select(v => v == ChartData.NONE ? min + 0.1 : v).ToArray();
+            }
+        }
+
+        public class JsonData
+        {
+            public double[] value { get; set; }
+            public string name { get; set; }
+
+            public JsonData() {
+            }
+
+            public JsonData(string _name) {
+                name = _name;
+            }
+
+            public void SetValue(List<int> values) {
+                value = ChartData.ValueConveter(values);
             }
         }
     }
