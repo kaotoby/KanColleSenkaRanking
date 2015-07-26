@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KanColleSenkaService.Module
+namespace KanColleSenkaService.Models
 {
     public class ServerData
     {
@@ -34,6 +34,10 @@ namespace KanColleSenkaService.Module
         /// The server name.
         /// </summary>
         public string Name { get { return _name; } }
+        /// <summary>
+        /// The server nick name.
+        /// </summary>
+        public string NickName { get { return _nickname; } }
         /// <summary>
         /// The server IP address.
         /// </summary>
@@ -85,7 +89,15 @@ namespace KanColleSenkaService.Module
         /// </summary>
         public string LogPath {
             get {
-                return string.Format(@"{0}[S{1:D2}]{2:yyMMddHH}.log", _logpdir, _id, _date);
+                return string.Format(@"{0}{1}{2:MMddt}.log", this.DirPath, _nickname, _date);
+            }
+        }
+        /// <summary>
+        /// The log file dir to be saved.
+        /// </summary>
+        public string DirPath {
+            get {
+                return string.Format(@"{0}{1}{2}\", _logdir, _id, _nickname);
             }
         }
         #endregion
@@ -95,6 +107,7 @@ namespace KanColleSenkaService.Module
         private DateTime _date;
         private int _id;
         private string _name;
+        private string _nickname;
         private string _ip;
         private string _apiToken;
         private string _apiStartTime;
@@ -102,15 +115,16 @@ namespace KanColleSenkaService.Module
         private string _password;
         private int _errorCount = 0;
         private List<SenkaData> _dataSet = new List<SenkaData>();
-        private string _logpdir = AppDomain.CurrentDomain.BaseDirectory + @"SenkaLog\";
+        private string _logdir = AppDomain.CurrentDomain.BaseDirectory + @"SenkaLog\";
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerData).FullName);
         #endregion
 
-        public ServerData(object id, object name, object username, object password) {
-            _id = Convert.ToInt32(id);
-            _name = (string)name;
-            _username = Convert.IsDBNull(username) ? "" : (string)username;
-            _password = Convert.IsDBNull(password) ? "" : (string)password;
+        public ServerData(Dictionary<string, object> data) {
+            _id = Convert.ToInt32(data["ID"]);
+            _name = Convert.ToString(data["Name"]);
+            _nickname = Convert.ToString(data["NickName"]);
+            _username = Convert.ToString(data["UserName"]);
+            _password = Convert.ToString(data["Password"]);
             NextUpdateTime = DateTime.Now;
         }
 
@@ -122,6 +136,9 @@ namespace KanColleSenkaService.Module
             _dataSet.Clear();
             _date = date;
             _dateID = dateID;
+            if (!Directory.Exists(DirPath)) {
+                Directory.CreateDirectory(this.DirPath);
+            }
             if (File.Exists(this.LogPath)) {
                 File.Delete(this.LogPath);
             }
@@ -248,6 +265,24 @@ namespace KanColleSenkaService.Module
                         transaction.Commit();
                     }
                 }
+            }
+        }
+
+        public void UpdateTimeToDataBase() {
+            string _sql = @"UPDATE Servers SET LastUpdate = @DateID WHERE ID = @ServerID";
+            using (var DataBaseConnection = KanColleSenkaManager.NewSQLiteConnection())
+            using (var cmd = new SQLiteCommand(_sql, DataBaseConnection)) {
+                DataBaseConnection.Open();
+
+                SQLiteParameter[] paras = new SQLiteParameter[2]{
+                            new SQLiteParameter("@DateID", DbType.Int64),
+                            new SQLiteParameter("@ServerID", DbType.Int32)
+                        };
+                cmd.Parameters.AddRange(paras);
+                cmd.Parameters["@DateID"].Value = _dateID;
+                cmd.Parameters["@ServerID"].Value = _id;
+
+                cmd.ExecuteNonQuery();
             }
         }
     }

@@ -528,134 +528,149 @@
 // Inverse navbar
 
 .navbar-inverse {
-  background-color: @navbar-inverse-bg;
-  border-color: @navbar-inverse-border;
+    background-color: @navbar-inverse-bg;
+    background-image: linear-gradient(0deg, darken(@navbar-inverse-bg, 2%), @navbar-inverse-bg 20%);
+    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    border-color: @navbar-inverse-border;
 
-  .navbar-brand {
-    color: @navbar-inverse-brand-color;
-    &:hover,
-    &:focus {
-      color: @navbar-inverse-brand-hover-color;
-      background-color: @navbar-inverse-brand-hover-bg;
-    }
-  }
+    .navbar-brand {
+        color: @navbar-inverse-brand-color;
 
-  .navbar-text {
-    color: @navbar-inverse-color;
-  }
-
-  .navbar-nav {
-    > li > a {
-      color: @navbar-inverse-link-color;
-
-      &:hover,
-      &:focus {
-        color: @navbar-inverse-link-hover-color;
-        background-color: @navbar-inverse-link-hover-bg;
-      }
-    }
-    > .active > a {
-      &,
-      &:hover,
-      &:focus {
-        color: @navbar-inverse-link-active-color;
-        background-color: @navbar-inverse-link-active-bg;
-      }
-    }
-    > .disabled > a {
-      &,
-      &:hover,
-      &:focus {
-        color: @navbar-inverse-link-disabled-color;
-        background-color: @navbar-inverse-link-disabled-bg;
-      }
-    }
-  }
-
-  // Darken the responsive nav toggle
-  .navbar-toggle {
-    border-color: @navbar-inverse-toggle-border-color;
-    &:hover,
-    &:focus {
-      background-color: @navbar-inverse-toggle-hover-bg;
-    }
-    .icon-bar {
-      background-color: @navbar-inverse-toggle-icon-bar-bg;
-    }
-  }
-
-  .navbar-collapse,
-  .navbar-form {
-    border-color: darken(@navbar-inverse-bg, 7%);
-  }
-
-  // Dropdowns
-  .navbar-nav {
-    > .open > a {
-      &,
-      &:hover,
-      &:focus {
-        background-color: @navbar-inverse-link-active-bg;
-        color: @navbar-inverse-link-active-color;
-      }
-    }
-
-    @media (max-width: @grid-float-breakpoint-max) {
-      // Dropdowns get custom display
-      .open .dropdown-menu {
-        > .dropdown-header {
-          border-color: @navbar-inverse-border;
+        &:hover,
+        &:focus {
+            color: @navbar-inverse-brand-hover-color;
+            background-color: @navbar-inverse-brand-hover-bg;
         }
-        .divider {
-          background-color: @navbar-inverse-border;
-        }
+    }
+
+    .navbar-text {
+        color: @navbar-inverse-color;
+    }
+
+    .navbar-nav {
         > li > a {
-          color: @navbar-inverse-link-color;
-          &:hover,
-          &:focus {
-            color: @navbar-inverse-link-hover-color;
-            background-color: @navbar-inverse-link-hover-bg;
-          }
+            color: @navbar-inverse-link-color;
+
+            &:hover,
+            &:focus {
+                color: @navbar-inverse-link-hover-color;
+                background-color: @navbar-inverse-link-hover-bg;
+            }
         }
+
         > .active > a {
-          &,
-          &:hover,
-          &:focus {
-            color: @navbar-inverse-link-active-color;
-            background-color: @navbar-inverse-link-active-bg;
-          }
+            &,
+            &:hover,
+            &:focus {
+                color: @navbar-inverse-link-active-color;
+                background-color: @navbar-inverse-link-active-bg;
+            }
         }
+
         > .disabled > a {
-          &,
-          &:hover,
-          &:focus {
-            color: @navbar-inverse-link-disabled-color;
-            background-color: @navbar-inverse-link-disabled-bg;
-          }
+            &,
+            &:hover,
+            &:focus {
+                color: @navbar-inverse-link-disabled-color;
+                background-color: @navbar-inverse-link-disabled-bg;
+            }
         }
-      }
     }
-  }
+    // Darken the responsive nav toggle
+    .navbar-toggle {
+        border-color: @navbar-inverse-toggle-border-color;
 
-  .navbar-link {
-    color: @navbar-inverse-link-color;
-    &:hover {
-      color: @navbar-inverse-link-hover-color;
-    }
-  }
+        &:hover,
+        &:focus {
+            background-color: @navbar-inverse-toggle-hover-bg;
+        }
 
-  .btn-link {
-    color: @navbar-inverse-link-color;
-    &:hover,
-    &:focus {
-      color: @navbar-inverse-link-hover-color;
+        .icon-bar {
+            background-color: @navbar-inverse-toggle-icon-bar-bg;
+        }
     }
-    &[disabled],
-    fieldset[disabled] & {
-      &:hover,
-      &:focus {
-        color: @navbar-inverse-link-disabled-color;
-      }
+
+    .navbar-collapse,
+    .navbar-form {
+        border-color: darken(@navbar-inverse-bg, 7%);
     }
-  }
+    // Dropdowns
+    .navbar-nav {
+        > .open > a {
+            &,
+            &:hover,
+            &:focus {
+                background-color: @navbar-inverse-link-active-bg;
+                color: @navbar-inverse-link-active-color;
+            }
+        }
+
+        @media (max-width: @grid-float-breakpoint-max) {
+            // Dropdowns get custom display
+            .open .dropdown-menu {
+                > .dropdown-header {
+                    border-color: @navbar-inverse-border;
+                }
+
+                .divider {
+                    background-color: @navbar-inverse-border;
+                }
+
+                > li > a {
+                    color: @navbar-inverse-link-color;
+
+                    &:hover,
+                    &:focus {
+                        color: @navbar-inverse-link-hover-color;
+                        background-color: @navbar-inverse-link-hover-bg;
+                    }
+                }
+
+                > .active > a {
+                    &,
+                    &:hover,
+                    &:focus {
+                        color: @navbar-inverse-link-active-color;
+                        background-color: @navbar-inverse-link-active-bg;
+                    }
+                }
+
+                > .disabled > a {
+                    &,
+                    &:hover,
+                    &:focus {
+                        color: @navbar-inverse-link-disabled-color;
+                        background-color: @navbar-inverse-link-disabled-bg;
+                    }
+                }
+            }
+        }
+    }
+
+    .navbar-link {
+        color: @navbar-inverse-link-color;
+
+        &:hover {
+            color: @navbar-inverse-link-hover-color;
+        }
+    }
+
+    .btn-link {
+        color: @navbar-inverse-link-color;
+
+        &:hover,
+        &:focus {
+            color: @navbar-inverse-link-hover-color;
+        }
+
+        &[disabled],
+        fieldset[disabled] & {
+            &:hover,
+            &:focus {
+                color: @navbar-inverse-link-disabled-color;
+            }
+        }
+    }
 }

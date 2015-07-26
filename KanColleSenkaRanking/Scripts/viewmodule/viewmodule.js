@@ -1,5 +1,6 @@
 ﻿$(function () {
     var $sidebar = $('#sidebar').find('.list-group-item');
+    var $active = $('#sidebar').find(".active");
     var $affix = $('#affix');
 
     $(window).resize(function () {
@@ -37,26 +38,39 @@
         });
 
         $sidebar.hover(function () {
-            $(this).find('.trans').each(function (index, elem) {
-                $(elem).transition({ rotateY: 90, delay: index * 50 }, 200, 'ease', function () {
-                    $(elem).css({ rotateY: 270 })
-                        .transition({ rotateY: 360 }, 200, 'ease', function () {
-                            $(elem).css({ rotateY: 0 });
-                        });
-                });
-            });
+            Flip($(this), 200);
         }, function myfunction() {
             $(this).find('.trans').transitionStop().css({ rotateY: 0 });
         });
+
+        
+        if ($active.length == 1) {
+            setInterval(function () {
+                Flip($active, 400);
+            }, 10000);
+        }
     }
 
     $(document).ready(function () {
         $(window).trigger('resize');
         $affix.hide();
         $affix.css({ visibility: 'visible' });
-        $affix.slideDown(600).animate({ opacity: 1 }, { queue: false, duration: 400 });
+        $affix.delay(500).slideDown(600).animate({ opacity: 1 }, { queue: false, duration: 400 });
     });
 });
+
+function Flip($elem, time) {
+    if ($.support.transition) {
+        $elem.find('.trans').transitionStop().each(function (index, elem) {
+            $(elem).transition({ rotateY: 90, delay: index * 50 }, time, 'ease', function () {
+                $(elem).css({ rotateY: 270 })
+                    .transition({ rotateY: 360 }, time, 'ease', function () {
+                        $(elem).css({ rotateY: 0 });
+                    });
+            });
+        });
+    }
+}
 
 function GetMaxScale(numArray) {
     return Math.max.apply(null, numArray);

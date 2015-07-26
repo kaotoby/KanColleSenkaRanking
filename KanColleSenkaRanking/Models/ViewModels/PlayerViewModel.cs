@@ -56,12 +56,21 @@ namespace KanColleSenkaRanking.ViewModels
                 _playerData = chartDataSet.Last();
                 _activity = serverManager.GetPlayerActivityList(playerID, 3);
 
-                if (_playerData.Date != _server.LastUpdateTime.DateTime) {
+                if (_playerData.Date.ID != _server.LastUpdateTime.ID) {
                     _rankingHtmlClass = " hidden";
                 } else {
                     _rankingHtmlClass = "";
                 }
             }
+        }
+
+        public object ToJsonObject() {
+            return new {
+                player = _playerData.ToJsonObject(),
+                charts = new object[] {
+                    
+                }
+            };
         }
 
         public void CreatePlayerCharts(IList<SenkaData> datas) {
@@ -70,7 +79,7 @@ namespace KanColleSenkaRanking.ViewModels
                 .GroupBy(r => r.Ranking)
                 .ToDictionary(
                     groupitem => groupitem.Key,
-                    value => value.ToDictionary(data => data.Date, data => data)
+                    value => value.ToDictionary(data => data.Date.DateTime, data => data)
                 );
             int upper = boundDic.Keys.Min();
             int lower = boundDic.Keys.Max();
@@ -97,7 +106,7 @@ namespace KanColleSenkaRanking.ViewModels
             List<int> lowerValues = new List<int>();
             #endregion
 
-            Dictionary<DateTime, SenkaData> dic = datas.ToDictionary(d => d.Date, d => d);
+            Dictionary<DateTime, SenkaData> dic = datas.ToDictionary(d => d.Date.DateTime, d => d);
             DateTime end = boundDic[lower].Keys.Max();
             DateTime last = boundDic[lower].Keys.Min();
             DateTime date = last;
@@ -149,7 +158,7 @@ namespace KanColleSenkaRanking.ViewModels
             if (end.Hour == 15) {
                 deltaPMValues.Add(ChartData.NONE);
             }
-            if (deltaAMValues[0] == ChartData.NONE && deltaPMValues[0] == ChartData.NONE) {
+            if (deltaAMValues.Count > 0 && deltaAMValues[0] == ChartData.NONE && deltaPMValues[0] == ChartData.NONE) {
                 deltaAMValues.RemoveAt(0);
                 deltaPMValues.RemoveAt(0);
             }

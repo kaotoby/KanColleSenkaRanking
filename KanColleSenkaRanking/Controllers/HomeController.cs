@@ -18,12 +18,14 @@ namespace KanColleSenkaRanking.Controllers
 
         [ChildActionOnly] //no cache
         public PartialViewResult Announcement() {
+            Response.StatusDescription = "Child";
             return PartialView();
         }
 
         [ChildActionOnly]
         [OutputCache(Duration = 7200)] //2 hour
         public PartialViewResult DevState() {
+            Response.StatusDescription = "Child";
             IEnumerable<DevStateData> model = DevStateData.GetFromFile();
             return PartialView(model);
         }
@@ -31,12 +33,13 @@ namespace KanColleSenkaRanking.Controllers
         [ChildActionOnly]
         [OutputCache(Duration = 7200)] //2 hour
         public PartialViewResult ServerList() {
+            Response.StatusDescription = "Child";
             IEnumerable<SenkaServerData> model = serverManager.Servers.Values;
             return PartialView(model);
         }
 
         //rarely access, no cache
-        [MvcSiteMapNodeAttribute(Title = "開発ツール", ParentKey = "Home",
+        [MvcSiteMapNodeAttribute(Title = "開発ツール", ParentKey = "Home", Protocol = "https",
             Description = "戦果基地使用された開発ツール。")]
         public ActionResult DevTool() {
             return View();

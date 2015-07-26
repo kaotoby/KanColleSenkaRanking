@@ -11,11 +11,7 @@ namespace KanColleSenkaRanking.Models
         /// <summary>
         /// The time that data collected.
         /// </summary>
-        public DateTime Date { get { return _date; } }
-        /// <summary>
-        /// The time string that data collected.
-        /// </summary>
-        public string DateString { get { return _date.ToString("yyyy年M月d日 H時"); } }
+        public SenkaTimeInfo Date { get { return _date; } }
         /// <summary>
         /// The player ranking.
         /// </summary>
@@ -59,7 +55,7 @@ namespace KanColleSenkaRanking.Models
         #endregion
 
         #region Private Declarition
-        private DateTime _date;
+        private SenkaTimeInfo _date;
         private int _ranking;
         private int _level;
         private string _playerName;
@@ -72,8 +68,8 @@ namespace KanColleSenkaRanking.Models
         private int? _rankPointDelta;
         #endregion
 
-        public SenkaData(Dictionary<string, object> data) {
-            _date = Convert.ToDateTime(data["Date"]);
+        public SenkaData(System.Data.SQLite.SQLiteDataReader data) {
+            _date = new SenkaTimeInfo(data["DateID"], data["Date"]);
             _ranking = Convert.ToInt32(data["Ranking"]);
             _level = Convert.ToInt32(data["Level"]);
             _playerName = Convert.ToString(data["PlayerName"]);
@@ -121,6 +117,21 @@ namespace KanColleSenkaRanking.Models
                 }
             }
             return data;
+        }
+
+        public object ToJsonObject() {
+            return new {
+                ranking = _ranking,
+                level = _level,
+                player_id = _playerID,
+                player_name = _playerName,
+                comment = _comment,
+                rank_point = _rankPoint,
+                rank_name = _rankName,
+                medals = _medals,
+                ranking_delta = _rankingDelta,
+                rank_point_delta = _rankPointDelta
+            };
         }
     }
 }

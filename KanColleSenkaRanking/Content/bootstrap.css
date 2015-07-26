@@ -4452,6 +4452,10 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 }
 .navbar-inverse {
   background-color: #1f1e11;
+  background-image: linear-gradient(0deg, #18180d, #1f1e11 20%);
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
   border-color: #000000;
 }
 .navbar-inverse .navbar-brand {

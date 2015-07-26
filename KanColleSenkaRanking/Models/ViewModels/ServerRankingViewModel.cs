@@ -22,22 +22,23 @@ namespace KanColleSenkaRanking.ViewModels
         private HtmlString _state;
         private SenkaManager serverManager = DependencyResolver.Current.GetService<SenkaManager>();
         private string _description;
+        private DateTime d;
 
         public ServerRankingViewModel(int serverID, int limit, string date) {
             if (serverManager.Servers.Keys.Contains(serverID)) {
                 _server = serverManager.Servers[serverID];
                 if (_server.Enabled) {
-                    DateTime d;
                     if (date == null) {
                         _server.CheckForNewData();
                         d = _server.LastUpdateTime.DateTime;
                         _rankingDataSet = _server.GetRankingList(limit);
                     } else {
-                        long dateID, compareDateID;
+                        limit = 990;
+                        SenkaTimeInfo dateInfo, compareDateInfo;
                         if (DateTime.TryParseExact(date, "yyMMddHH", null, DateTimeStyles.None, out d) &&
-                            _server.GetDateID(d, out dateID, out compareDateID)) {
+                            _server.GetDateID(d, out dateInfo, out compareDateInfo)) {
 
-                            _rankingDataSet = _server.GetRankingList(limit, dateID, compareDateID);
+                                _rankingDataSet = _server.GetRankingList(limit, dateInfo, compareDateInfo);
                         } else {
                             throw new HttpException(404, "Not found");
                         }
@@ -56,6 +57,14 @@ namespace KanColleSenkaRanking.ViewModels
             } else {
                 throw new HttpException(404, "Not found");
             }
+        }
+
+        public object ToJsonObject() {
+            return new {
+                name = _server.Name,
+                date = d.ToString("s"),
+                list = _rankingDataSet.Select(data => data.ToJsonObject())
+            };
         }
     }
 }

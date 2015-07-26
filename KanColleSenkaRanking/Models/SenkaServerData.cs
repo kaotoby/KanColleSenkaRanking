@@ -40,7 +40,7 @@ namespace KanColleSenkaRanking.Models
         /// <summary>
         /// The releative Url to for the server
         /// </summary>
-        public string Url { get { return string.Format("/server/{0}", _id); } }
+        public string Url { get { return string.Format("/server/{0}/", _id); } }
         #endregion
 
         #region Private Declarition
@@ -88,13 +88,14 @@ namespace KanColleSenkaRanking.Models
             }
         }
 
-        public bool GetDateID(DateTime date, out long dateID, out long compareDateID) {
+        public bool GetDateID(DateTime date, out SenkaTimeInfo dateInfo, out SenkaTimeInfo compareDateInfo) {
             if (date.Hour != 3 && date.Hour != 15) {
-                dateID = compareDateID = 0;
+                dateInfo = compareDateInfo = null;
                 return false;
             } else {
                 string _sql1 = "SELECT ID FROM Dates WHERE Date = @Date";
-                string _sql2 = "SELECT MAX(DateID) FROM Senka WHERE DateID < @DateID AND ServerID = " + _id.ToString();
+                string _sql2 = "SELECT MAX(DateID), Date FROM Senka JOIN Dates ON Senka.DateID = Dates.ID" + 
+                    " WHERE DateID < @DateID AND ServerID = " + _id.ToString();
                 try {
                     using (var DataBaseConnection = SenkaManager.NewSQLiteConnection())
                     using (var cmd = new SQLiteCommand(_sql1, DataBaseConnection)) {
@@ -103,16 +104,17 @@ namespace KanColleSenkaRanking.Models
                         cmd.Parameters["@Date"].Value = date;
                         object _dateID = cmd.ExecuteScalar();
                         if (_dateID != null) {
-                            dateID = Convert.ToInt64(_dateID);
+                            dateInfo = new SenkaTimeInfo(_dateID, date);
                             cmd.CommandText = _sql2;
                             cmd.Parameters.Clear();
                             cmd.Parameters.Add(new SQLiteParameter("@DateID", DbType.Int64));
-                            cmd.Parameters["@DateID"].Value = dateID;
-                            object _compareID = cmd.ExecuteScalar();
-                            if (_compareID != null) {
-                                compareDateID = Convert.ToInt64(_compareID);
-                            } else {
-                                throw new FormatException();
+                            cmd.Parameters["@DateID"].Value = dateInfo.ID;
+                            using (var reader = cmd.ExecuteReader()) {
+                                if (reader.Read()) {
+                                    compareDateInfo = new SenkaTimeInfo(reader[0], reader[1]);
+                                } else {
+                                    throw new FormatException();
+                                }
                             }
                         } else {
                             throw new FormatException();
@@ -120,17 +122,17 @@ namespace KanColleSenkaRanking.Models
                     }
                     return true;
                 } catch (Exception) {
-                    dateID = compareDateID = 0;
+                    dateInfo = compareDateInfo = null;
                     return false;
                 }
             }
         }
 
         public IList<SenkaData> GetRankingList(int limit) {
-            return GetRankingList(limit, _lastUpdateTime.ID, _compareToTime.ID);
+            return GetRankingList(limit, _lastUpdateTime, _compareToTime);
         }
 
-        public IList<SenkaData> GetRankingList(int limit, long dateID, long compareDateID) {
+        public IList<SenkaData> GetRankingList(int limit, SenkaTimeInfo date, SenkaTimeInfo compareDate) {
             List<SenkaData> latestDataset = new List<SenkaData>();
             Dictionary<long, SenkaData> compareDataset = new Dictionary<long, SenkaData>();
 
@@ -141,6 +143,9 @@ namespace KanColleSenkaRanking.Models
             } else {
                 latestSQL = " AND Ranking <= " + limit.ToString();
             }
+            if (date.DateTime.Day == 1 && date.DateTime.Hour == 3) {
+                compareDate = date;
+            }
             using (var DataBaseConnection = SenkaManager.NewSQLiteConnection())
             using (var cmd = new SQLiteCommand(SenkaManager.DefaultSQL + serverSQL + latestSQL, DataBaseConnection)) {
                 DataBaseConnection.Open();
@@ -150,40 +155,20 @@ namespace KanColleSenkaRanking.Models
                 };
                 cmd.Parameters.AddRange(paras);
                 cmd.Parameters["@ServerID"].Value = _id;
-                cmd.Parameters["@DateID"].Value = dateID;
+                cmd.Parameters["@DateID"].Value = date.ID;
                 //Latest Data
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        Dictionary<string, object> data = new Dictionary<string, object>();
-                        data["Date"] = reader["Date"];
-                        data["Ranking"] = reader["Ranking"];
-                        data["Level"] = reader["Level"];
-                        data["PlayerName"] = reader["PlayerName"];
-                        data["PlayerID"] = reader["PlayerID"];
-                        data["Comment"] = reader["Comment"];
-                        data["RankPoint"] = reader["RankPoint"];
-                        data["Medals"] = reader["Medals"];
-                        data["RankName"] = reader["RankName"];
-                        latestDataset.Add(new SenkaData(data));
+                        latestDataset.Add(new SenkaData(reader));
                     }
                 }
                 //Compare Data
-                if (dateID != compareDateID) {
+                if (date.ID != compareDate.ID) {
                     cmd.CommandText = SenkaManager.DefaultSQL + serverSQL;
-                    cmd.Parameters["@DateID"].Value = compareDateID;
+                    cmd.Parameters["@DateID"].Value = compareDate.ID;
                     using (var reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
-                            Dictionary<string, object> data = new Dictionary<string, object>();
-                            data["Date"] = reader["Date"];
-                            data["Ranking"] = reader["Ranking"];
-                            data["Level"] = reader["Level"];
-                            data["PlayerName"] = reader["PlayerName"];
-                            data["PlayerID"] = reader["PlayerID"];
-                            data["Comment"] = reader["Comment"];
-                            data["RankPoint"] = reader["RankPoint"];
-                            data["RankName"] = reader["RankName"];
-                            data["Medals"] = reader["Medals"];
-                            SenkaData senkadata = new SenkaData(data);
+                            SenkaData senkadata = new SenkaData(reader);
                             compareDataset.Add(senkadata.PlayerID, senkadata);
                         }
                     }
@@ -215,17 +200,7 @@ namespace KanColleSenkaRanking.Models
                 //Latest Data
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        Dictionary<string, object> data = new Dictionary<string, object>();
-                        data["Date"] = reader["Date"];
-                        data["Ranking"] = reader["Ranking"];
-                        data["Level"] = reader["Level"];
-                        data["PlayerName"] = reader["PlayerName"];
-                        data["PlayerID"] = reader["PlayerID"];
-                        data["Comment"] = reader["Comment"];
-                        data["RankPoint"] = reader["RankPoint"];
-                        data["Medals"] = reader["Medals"];
-                        data["RankName"] = reader["RankName"];
-                        playerList.Add(new SenkaData(data));
+                        playerList.Add(new SenkaData(reader));
                     }
                 }
             }
@@ -256,24 +231,14 @@ namespace KanColleSenkaRanking.Models
                 cmd.Parameters["@DateEnd"].Value = end;
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        Dictionary<string, object> data = new Dictionary<string, object>();
-                        data["Date"] = reader["Date"];
-                        data["Ranking"] = reader["Ranking"];
-                        data["Level"] = reader["Level"];
-                        data["PlayerName"] = reader["PlayerName"];
-                        data["PlayerID"] = reader["PlayerID"];
-                        data["Comment"] = reader["Comment"];
-                        data["RankPoint"] = reader["RankPoint"];
-                        data["Medals"] = reader["Medals"];
-                        data["RankName"] = reader["RankName"];
-                        dataset.Add(new SenkaData(data));
+                        dataset.Add(new SenkaData(reader));
                     }
                 }
             }
 
             return dataset.GroupBy(d => d.Ranking)
                 .OrderBy(d => d.Key)
-                .ToDictionary(d => d.Key, d => d.OrderBy(v => v.Date).ToDictionary(v => v.Date, v => v));
+                .ToDictionary(d => d.Key, d => d.OrderBy(v => v.Date).ToDictionary(v => v.Date.DateTime, v => v));
         }
     }
 }

@@ -1,2 +1,57 @@
-﻿<h2>Under Constrtion</h2>
+﻿@model IList<Tuple<KanColleSenkaRanking.Models.SenkaData, string>>
+@{
+    ViewBag.Title = "全サーバのランキング - " + MvcApplication.Name;
+    int page = ViewBag.Page;
+}
+<div class="page-header">
+    <h1>全サーバのランキング <br class="visible-sm visible-xs" /><small>@Model.First().Item1.Date.ToString()</small></h1>
+</div>
+<table class="table table-bordered table-condensed table-hover">
+    <thead class="panel-heading">
+        <tr>
+            <td>順位</td>
+            <td>鯖順位</td>
+            <td>鯖</td>
+            <td>提督名</td>
+            <td>コメント</td>
+            <td>戦果</td>
+            <td class="hidden-sm hidden-xs">勲章</td>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++) {
+            var data = Model[i];
+            <tr id="rank@(data.Item1.Ranking)" class="clickable" data-href="/player/@data.Item1.PlayerID">
+                <td>@((page - 1) * Model.Count + i + 1)位</td>
+                <td class="cl-gray">@(data.Item1.Ranking)位</td>
+                <td>@data.Item2</td>
+                <td>@data.Item1.PlayerName</td>
+                <td>@data.Item1.Comment</td>
+                <td>@data.Item1.RankPoint</td>
+                <td class="hidden-sm hidden-xs">@(data.Item1.Medals == 1 ? "甲" : "")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<nav class="text-center">
+    <ul class="pagination pagination-sm text-center">
+        @if (page > 1) {
+            <li><a href="?p=@(page - 1)" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        } else {
+            <li class="disabled"><span aria-label="Previous"><span aria-hidden="true">&laquo;</span></span></li>
+        }
+        @for (int i = 1; i <= 10; i++) {
+            if (page == i) {
+                <li class="active"><a>@i <span class="sr-only">(current)</span></a></li>
+            } else {
+                <li><a href="?p=@(i)">@i</a></li>
+            }
+        }
+        @if (page < 10) {
+            <li><a href="?p=@(page + 1)" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        } else {
+            <li class="disabled"><span aria-label="Next"><span aria-hidden="true">&raquo;</span></span></li>
+        }
+    </ul>
 
+</nav>

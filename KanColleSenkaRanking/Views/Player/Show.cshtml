@@ -28,7 +28,7 @@
     <tbody>
         @foreach (var data in Model.Activity) {
             <tr>
-                <td>@data.DateString</td>
+                <td>@data.Date.ToString()</td>
                 <td>@data.Level</td>
                 <td>@data.Comment</td>
             </tr>

@@ -3,9 +3,11 @@
             xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
             xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
 
-  <mvcSiteMapNode title="戦果基地" controller="Home" action="Index" key="Home" changeFrequency="Hourly" updatePriority="Absolute_100"
-                  description="このサイトは艦娘戦果ランキング集計だけじゃなく、「履歴」と「分析チャート」の機能もあります。各サーバ戦果情報を午前と午後3時半頃更新しております。">
-    <mvcSiteMapNode title="全サーバ" controller="Server" url="/server/" key="Server" description="全サーバの情報一目" changeFrequency="Hourly" />
+  <mvcSiteMapNode title="戦果基地" controller="Home" action="Index" key="Home" changeFrequency="Hourly" updatePriority="Absolute_100" protocol="https"
+                  description="このサイトは艦これ戦果ランキング集計だけじゃなく、「履歴」と「分析チャート」の機能もあります。各サーバ戦果情報を午前と午後3時半頃更新しております。">
+    <mvcSiteMapNode title="全サーバ" controller="Server" url="/server/" key="Server" description="全サーバの情報一目" changeFrequency="Hourly" protocol="https">
+      <mvcSiteMapNode title="ランキング" controller="Server" url="/server/ranking" description="全サーバのランキング" changeFrequency="Hourly" protocol="https" />
+    </mvcSiteMapNode>
   </mvcSiteMapNode>
 
 </mvcSiteMap>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KanColleSenkaService.Module;
+using KanColleSenkaService.Models;
 using System.Data.SQLite;
 using System.Net;
 using System.Collections.Specialized;
@@ -37,11 +37,13 @@ namespace KanColleSenkaService
                 DataBaseConnection.Open();
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        _servers.Add(new ServerData(
-                            reader["ID"],
-                            reader["Name"],
-                            reader["UserName"],
-                            reader["Password"]));
+                        Dictionary<string, object> data = new Dictionary<string, object>();
+                        data["ID"] = reader["ID"];
+                        data["Name"] = reader["Name"];
+                        data["NickName"] = reader["NickName"];
+                        data["UserName"] = reader["UserName"];
+                        data["Password"] = reader["Password"];
+                        _servers.Add(new ServerData(data));
                     }
                 }
             }
@@ -87,11 +89,8 @@ namespace KanColleSenkaService
             HttpHelper helper = new HttpHelper();
             Random rand = new Random();
             Dictionary<string, string> postDic = new Dictionary<string, string>();
-            Dictionary<string, string> customHeader = new Dictionary<string, string>();
             string referer = serverdata.SwfPath + "/[[DYNAMIC]]/1";
-            customHeader["Pragma"] = "no-cache";
-            customHeader["x-flash-version"] = "16,0,0,305";
-            int currentRetryPage = 0, currentRetryCount = 0;
+            int currentRetryCount = 0;
 
 #if DEBUG
             for (int i = 1; i <= 3; i++) {
@@ -102,15 +101,13 @@ namespace KanColleSenkaService
                 postDic["api_pageno"] = i.ToString();
                 postDic["api_verno"] = "1";
                 postDic["api_token"] = serverdata.ApiToken;
-                helper.CTRHttp(serverdata.FullPath, referer, postDic, customHeader, ref jsonResult);
+                helper.CTRHttp(serverdata.FullPath, referer, postDic, ref jsonResult);
 
-                if (jsonResult == "" || BatchParse(jsonResult, serverdata, i)) {
+                if (BatchParse(jsonResult, serverdata, i)) {
                     Thread.Sleep(rand.Next(700, 2000));
+                    currentRetryCount = 0;
                 } else {
-                    if (i != currentRetryPage) {
-                        currentRetryPage = i;
-                        currentRetryCount = 0;
-                    } else if (currentRetryCount == 2) {
+                    if (currentRetryCount == 2) {
                         string errMsg = string.Format("[ServerID {0}] Page {1}, request failed!", serverdata.ID, i);
                         log.Error(errMsg);
                         throw new WebException(errMsg);
@@ -125,7 +122,7 @@ namespace KanColleSenkaService
             serverdata.ErrorrCount = 0;
             serverdata.NextUpdateTime = newtime;
             serverdata.SaveToDataBase();
-            serverdata.SaveExpToDataBase();
+            serverdata.UpdateTimeToDataBase();
             log.Info(string.Format("[ServerID {0}] Server update finished", serverdata.ID));
         }
 
@@ -142,7 +139,7 @@ namespace KanColleSenkaService
                         serverdata.AddData(new SenkaData(apiResult));
                     }
                     // Save To File
-                    File.AppendAllText(serverdata.LogPath, jsonString + "\r\n");
+                    File.AppendAllText(serverdata.LogPath, string.Format("api_req_ranking,getlist,\"{0}\"\"\",\r\n", jsonString.Replace("\"\"", new String('\"', 8))));
                 } else {
                     throw new WebException(jsonString);
                 }

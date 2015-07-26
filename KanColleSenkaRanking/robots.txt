@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: http://www.senka.me/sitemap.xml
+Sitemap: https://www.senka.me/sitemap.xml

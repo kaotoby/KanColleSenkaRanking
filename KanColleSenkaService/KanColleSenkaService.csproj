@@ -70,18 +70,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KanColleSenkaManager.cs" />
-    <Compile Include="Module\ApiSenkaResult.cs" />
-    <Compile Include="Module\DMMAjaxResult.cs" />
-    <Compile Include="Module\DMMLoginHelper.cs" />
-    <Compile Include="Module\HttpHelper.cs" />
-    <Compile Include="Module\SenkaData.cs" />
-    <Compile Include="Module\ServerData.cs" />
     <Compile Include="MainService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MainService.Designer.cs">
       <DependentUpon>MainService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApiSenkaResult.cs" />
+    <Compile Include="Models\DMMAjaxResult.cs" />
+    <Compile Include="Models\DMMLoginHelper.cs" />
+    <Compile Include="Models\HttpHelper.cs" />
+    <Compile Include="Models\SenkaData.cs" />
+    <Compile Include="Models\ServerData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>

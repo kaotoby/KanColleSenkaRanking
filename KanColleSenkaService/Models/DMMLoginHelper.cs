@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 
-namespace KanColleSenkaService.Module
+namespace KanColleSenkaService.Models
 {
     public class DMMLoginHelper
     {

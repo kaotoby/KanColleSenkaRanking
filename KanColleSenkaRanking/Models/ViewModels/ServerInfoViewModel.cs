@@ -114,11 +114,21 @@ namespace KanColleSenkaRanking.ViewModels
             }
             _rankPointChart.SetData(_rankPoint, lables.ToArray());
 
-            _avgAM.value = rankDeltaValue.Select(d => Math.Round(d.Value[0].Average(), 1)).ToArray();
-            _avgPM.value = rankDeltaValue.Select(d => Math.Round(d.Value[1].Average(), 1)).ToArray();
+            _avgAM.value = rankDeltaValue.Select(d => Math.Round(GetAvg(d.Value[0]), 1)).ToArray();
+            _avgPM.value = rankDeltaValue.Select(d => Math.Round(GetAvg(d.Value[1]), 1)).ToArray();
             var avgLabel = dic.Select(d=>d.Key.ToString() + "位").ToArray();
 
             _rankPointDeltaAvgChart.SetData(new ChartData.JsonData[2] { _avgAM, _avgPM }, avgLabel);
+        }
+
+        private double GetAvg(IEnumerable<int> values) {
+            int n = values.Count();
+            if (n == 0) return 0;
+            double sum = 0;
+            for (int i = 0; i < n; i++) {
+                sum += values.ElementAt(i);
+            }
+            return sum / n;
         }
     }
 }

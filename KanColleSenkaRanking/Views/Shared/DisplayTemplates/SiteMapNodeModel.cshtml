@@ -8,8 +8,12 @@
     if (string.IsNullOrEmpty(Model.Description)) {
         <a href="@Model.Url">@Model.Title</a>
     } else {
-        <a href="@Model.Url" title="@Model.Description">@Model.Title</a>
+        if (Model.Url.EndsWith("/")) {
+            <a href="@Model.Url" title="@Model.Description">@Model.Title</a>
+        } else {
+            <a href="@Model.Url/" title="@Model.Description">@Model.Title</a>
+        }
     }
-} else { 
+} else {
     <text>@Model.Title</text>
 }

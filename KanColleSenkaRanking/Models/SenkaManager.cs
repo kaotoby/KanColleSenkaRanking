@@ -65,17 +65,7 @@ namespace KanColleSenkaRanking.Models
 
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        Dictionary<string, object> data = new Dictionary<string, object>();
-                        data["Date"] = reader["Date"];
-                        data["Ranking"] = reader["Ranking"];
-                        data["Level"] = reader["Level"];
-                        data["PlayerName"] = reader["PlayerName"];
-                        data["PlayerID"] = reader["PlayerID"];
-                        data["Comment"] = reader["Comment"];
-                        data["RankPoint"] = reader["RankPoint"];
-                        data["RankName"] = reader["RankName"];
-                        data["Medals"] = reader["Medals"];
-                        dataset.Add(new SenkaData(data));
+                        dataset.Add(new SenkaData(reader));
                     }
                 }
             }
@@ -83,7 +73,7 @@ namespace KanColleSenkaRanking.Models
         }
 
         public IList<SenkaData> GetPlayerDataList(long playerID, out SenkaServerData serverData) {
-            DateTime now = DateTime.UtcNow.AddHours(-6);
+            DateTime now = DateTime.UtcNow.AddHours(9).AddHours(-12); //UTC+9 - 12hr
             DateTime start = new DateTime(now.Year, now.Month, 1);
             return GetPlayerDataList(playerID, start, out serverData);
         }
@@ -109,17 +99,7 @@ namespace KanColleSenkaRanking.Models
 
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        Dictionary<string, object> data = new Dictionary<string, object>();
-                        data["Date"] = reader["Date"];
-                        data["Ranking"] = reader["Ranking"];
-                        data["Level"] = reader["Level"];
-                        data["PlayerName"] = reader["PlayerName"];
-                        data["PlayerID"] = reader["PlayerID"];
-                        data["Comment"] = reader["Comment"];
-                        data["RankPoint"] = reader["RankPoint"];
-                        data["RankName"] = reader["RankName"];
-                        data["Medals"] = reader["Medals"];
-                        dataset.Add(new SenkaData(data));
+                        dataset.Add(new SenkaData(reader));
                         if (serverData == null) {
                             serverData = _servers[Convert.ToInt32(reader["ServerID"])];
                         }
@@ -130,7 +110,7 @@ namespace KanColleSenkaRanking.Models
         }
 
         public IList<SenkaData> GetPlayerBoundList(int serverID, SenkaData lastData) {
-            DateTime start = new DateTime(lastData.Date.Year, lastData.Date.Month, 1);
+            DateTime start = new DateTime(lastData.Date.DateTime.Year, lastData.Date.DateTime.Month, 1);
             List<SenkaData> dataset = new List<SenkaData>();
             int upper, lower;
             if (lastData.Ranking == 1) {
@@ -170,22 +150,36 @@ namespace KanColleSenkaRanking.Models
                 cmd.Parameters["@RankingUpper"].Value = upper;
                 cmd.Parameters["@RankingLower"].Value = lower;
                 cmd.Parameters["@DateStart"].Value = start;
-                cmd.Parameters["@DateEnd"].Value = lastData.Date;
+                cmd.Parameters["@DateEnd"].Value = lastData.Date.DateTime;
                 cmd.Parameters["@ServerID"].Value = serverID;
 
                 using (var reader = cmd.ExecuteReader()) {
                     while (reader.Read()) {
-                        Dictionary<string, object> data = new Dictionary<string, object>();
-                        data["Date"] = reader["Date"];
-                        data["Ranking"] = reader["Ranking"];
-                        data["Level"] = reader["Level"];
-                        data["PlayerName"] = reader["PlayerName"];
-                        data["PlayerID"] = reader["PlayerID"];
-                        data["Comment"] = reader["Comment"];
-                        data["RankPoint"] = reader["RankPoint"];
-                        data["RankName"] = reader["RankName"];
-                        data["Medals"] = reader["Medals"];
-                        dataset.Add(new SenkaData(data));
+                        dataset.Add(new SenkaData(reader));
+                    }
+                }
+            }
+            return dataset;
+        }
+
+        public IList<Tuple<SenkaData, string>> GetAllServerRanking(int limit) {
+            List<Tuple<SenkaData, string>> dataset = new List<Tuple<SenkaData, string>>();
+
+            string _sql = "SELECT Servers.NickName, Senka.*, Dates.Date, RankType.RankName FROM Senka" +
+                @" JOIN RankType ON Senka.RankType = RankType.ID" +
+                @" JOIN Dates ON Senka.DateID = Dates.ID" +
+                @" JOIN Servers ON Senka.ServerID = Servers.ID" +
+                @" WHERE Senka.DateID = (SELECT MIN(LastUpdate) FROM Servers)" + 
+                @" ORDER BY RankPoint DESC LIMIT " + limit.ToString();
+            using (var DataBaseConnection = NewSQLiteConnection())
+            using (var cmd = new SQLiteCommand(_sql, DataBaseConnection)) {
+                DataBaseConnection.Open();
+                using (var reader = cmd.ExecuteReader()) {
+                    while (reader.Read()) {
+                        SenkaData data = new SenkaData(reader);
+                        string server = Convert.ToString(reader["NickName"]);
+                        Tuple<SenkaData, string> tuple = new Tuple<SenkaData, string>(data, server);
+                        dataset.Add(tuple);
                     }
                 }
             }

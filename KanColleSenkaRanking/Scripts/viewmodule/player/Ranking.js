@@ -12,7 +12,7 @@ PlayerCharts.push(function (width, height) {
     var extMax = Math.floor(max / scale) * scale;
     var extMin = Math.ceil(min / scale) * scale;
     var newMax = 2 * extMax - extMin;
-    if (from0) {
+    if (from0 && scale == 1) {
         extMax += scale;
         newMax += scale;
     }
@@ -40,7 +40,7 @@ PlayerCharts.push(function (width, height) {
             text: FootNote,
             font: 'HGrgm',
             color: '#505050',
-            offsety: 15
+            offsety: 20
         },
         width: width,
         height: height * 1.2,

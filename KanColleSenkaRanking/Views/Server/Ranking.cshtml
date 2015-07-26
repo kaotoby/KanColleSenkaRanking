@@ -29,12 +29,18 @@
                 <td class="hidden-sm hidden-xs">@data.RankName</td>
                 <td>@data.Comment</td>
                 <td>@data.RankPoint <span class="@data.RankPointDelta.HtmlClass">@data.RankPointDelta.Value</span></td>
-                <td class="hidden-sm hidden-xs">@(data.Medals == 1 ? "甲" : "")</td>
+                @if (data.Medals == 1) {
+                    <td class="hidden-sm hidden-xs">甲</td>
+                } else if (data.Medals > 1) {
+                    <td class="hidden-sm hidden-xs">甲<sub class="font-bold">@data.Medals</sub></td>
+                } else {
+                    <td class="hidden-sm hidden-xs"></td>
+                }
             </tr>
         }
     </tbody>
 </table>
 @if (Model.IsDefaultListing && Model.Server.Enabled) {
-    <a class="btn btn-default btn-xs" href="@(Model.Server.Url)/ranking?lm=990#rank99">1-990位</a>
+    <a class="btn btn-default btn-xs" href="?lm=990#rank99">1-990位</a>
 }
 

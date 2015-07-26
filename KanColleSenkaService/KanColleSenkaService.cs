@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using KanColleSenkaService;
-using KanColleSenkaService.Module;
+using KanColleSenkaService.Models;
 
 namespace KanColleSenkaService
 {
