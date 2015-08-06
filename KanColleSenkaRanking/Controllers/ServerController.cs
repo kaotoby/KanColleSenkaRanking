@@ -33,13 +33,16 @@ namespace KanColleSenkaRanking.Controllers
         }
 
 #if !DEBUG
-        [OutputCache(Duration = 600, VaryByParam = "serverID;p;lm;d;f", Location = OutputCacheLocation.Server)]
+        [OutputCache(Duration = 1200, VaryByParam = "serverID;p;lm;d;f", Location = OutputCacheLocation.Server)]
 #endif
         [MvcSiteMapNodeAttribute(ParentKey = "Server", Protocol = "https",
             DynamicNodeProvider = "KanColleSenkaRanking.SiteMap.ServerRankingDynamicNodeProvider, KanColleSenkaRanking")]
         public ActionResult Ranking(int serverID, int p = 1, int lm = 0, string d = null, string f = null) {
             //lm = limit, d = date, p = page
             if (serverID == 0) {
+                if (f == "json") {
+                    return HttpNotFound();
+                }
                 int max = 10000;
                 var model = serverManager.GetAllServerRanking(max).Skip((p - 1) * max / 10).Take(max / 10).ToList();
                 ViewBag.Page = p;
